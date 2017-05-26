@@ -16,15 +16,21 @@ export function createCacheDecorator(type: CacheType, target: Object, method: Fu
 
     const provider: CacheProvider = getMethodCacheProvider(type);
 
+    let container: string;
+
     return function(...args: any[]) {
 
         const argsString = JSON.stringify(args) || 'void';
 
-        const cacheContainerKey: string = Reflect.getMetadata(CacheContainerKey, target.constructor);
-
         if (!provider.hasCache(key, argsString)) {
+
+            //MethodDecorators are set before ClassDecorators, which means we have to get the container key right here,
+            //instead of in the outer scope. But once we got it, there is no need to keep on getting it
+
+            container = container || Reflect.getMetadata(CacheContainerKey, target.constructor);
+
             provider.setCache(key, argsString, method.call(this, args));
-            provider.addToContainer(cacheContainerKey, key);
+            provider.addToContainer(container, key);
         }
 
         return provider.getCache(key, argsString);

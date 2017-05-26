@@ -10,8 +10,6 @@ export class MemoryCacheProvider extends BaseCacheProvider implements CacheProvi
     }
 
     public clearKeyCache(key: string): void {
-        console.log('hii');
-        console.log(key);
         this.cache.delete(key);
     }
 
