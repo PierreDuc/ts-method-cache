@@ -12,8 +12,6 @@ export function createCacheDecorator(type: CacheType, target: Object, method: Fu
         options = {key: options};
     }
 
-    const cacheContainerKey: string = Reflect.getMetadata(CacheContainerKey, target);
-
     const key: string = options && options.key || createGUID();
 
     const provider: CacheProvider = getMethodCacheProvider(type);
@@ -21,6 +19,8 @@ export function createCacheDecorator(type: CacheType, target: Object, method: Fu
     return function(...args: any[]) {
 
         const argsString = JSON.stringify(args) || 'void';
+
+        const cacheContainerKey: string = Reflect.getMetadata(CacheContainerKey, target.constructor);
 
         if (!provider.hasCache(key, argsString)) {
             provider.setCache(key, argsString, method.call(this, args));

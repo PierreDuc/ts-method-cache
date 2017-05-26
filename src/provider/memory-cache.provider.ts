@@ -10,6 +10,8 @@ export class MemoryCacheProvider extends BaseCacheProvider implements CacheProvi
     }
 
     public clearKeyCache(key: string): void {
+        console.log('hii');
+        console.log(key);
         this.cache.delete(key);
     }
 
@@ -29,7 +31,7 @@ export class MemoryCacheProvider extends BaseCacheProvider implements CacheProvi
         if (!this.cache.has(key)) {
             this.cache.set(key, new Map());
         }
-        return <Map<string, any>>this.cache.get(key);
+        return this.cache.get(key)!;
     }
 
 }

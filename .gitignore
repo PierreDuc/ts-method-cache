@@ -3,6 +3,7 @@ logs
 npm-debug.log*
 .idea/
 node_modules/
+src/.demo/
 .npm
 .eslintcache
 .node_repl_history

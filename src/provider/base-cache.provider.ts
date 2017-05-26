@@ -4,7 +4,7 @@ export abstract class BaseCacheProvider {
 
     public clearContainer(container: string): void {
         if (this.containers.has(container)) {
-            (<string[]>this.containers.get(container)).forEach(key => this.clearKeyCache(key));
+            this.containers.get(container)!.forEach(key => this.clearKeyCache(key));
         }
     }
     
@@ -15,8 +15,8 @@ export abstract class BaseCacheProvider {
         if (!this.containers.has(container)) {
             this.containers.set(container, []);
         }
-        let keys: string[] = <string[]>this.containers.get(container);
-        if (keys.indexOf(key) !== -1) {
+        let keys: string[] = this.containers.get(container)!;
+        if (keys.indexOf(key) === -1) {
             keys.push(key);
         }
     }
