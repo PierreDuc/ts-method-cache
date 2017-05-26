@@ -6,7 +6,7 @@ export function MemoryCache<T extends Function>(options?: CacheOptions|string): 
 
     return (target: Object, key: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> => {
 
-        descriptor.value = <T>createCacheDecorator(CacheType.Memory, <Function>descriptor.value, options);
+        descriptor.value = <T>createCacheDecorator(CacheType.Memory, target, <Function>descriptor.value, options);
 
         return descriptor;
 

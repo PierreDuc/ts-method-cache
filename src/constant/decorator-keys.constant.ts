@@ -1,0 +1,1 @@
+export const CacheContainerKey: string = "ts-mc:cache-container-decorator";

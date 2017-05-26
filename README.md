@@ -28,7 +28,13 @@ Import the `MemoryCache` method decorator and place it in front of the method fr
 result to be cached. Caching is based on the passed parameters to the method and an optional key string you can set as 
 a parameter in the decorator:  `@MethodCache(key)`. If the key is omitted, an GUID is generated. 
 
-Be aware though that you have no control and no means (yet) to access said cache if you do not pass a key.
+Be aware though that you have no control and no means (yet) to access said cache if you do not pass a key. 
+
+- `@MemoryCache`
+This will cache the result of the method for the duration of the application. Refreshing the browser
+or restarting the application will clear the cache.
+
+*Simple usage:*
 
     import {MemoryCache} from "ts-method-cache";
     
@@ -36,13 +42,31 @@ Be aware though that you have no control and no means (yet) to access said cache
     
         @MemoryCache()
         public getStuff(stuff: string): Promise<string> {
-           return Promise.resolve("stuff: " + stuff);
+           console.log("calling: ", stuff);
+           return Promise.resolve("returning: " + stuff);
         }
     
     }
     
-This will cache the result of the method for the duration of the application. Refreshing the browser
-or restarting the application will clear the cache.
+    let service: HttpServiceWithCache = new HttpServiceWithCache();
+    
+    service.getStuff("books").then(console.log);
+    service.getStuff("books").then(console.log);    
+    service.getStuff("cds").then(console.log);    
+    service.getStuff("cds").then(console.log);    
+    
+This will result in the following output:
+
+    /** @output
+    *  calling: books
+    *  calling: cds
+    *  returning: books
+    *  returning: books
+    *  returning: cds
+    *  returning: cds
+    */
+    
+As you can see the actual method is only called twice, while returning four times. It's magic!
 
 ## Todo
 
