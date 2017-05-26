@@ -42,8 +42,8 @@ or restarting the application will clear the cache.
     
         @MemoryCache()
         public getStuff(stuff: string): Promise<string> {
-           console.log("calling: ", stuff);
-           return Promise.resolve("returning: " + stuff);
+           console.log("calling stuff: ", stuff);
+           return Promise.resolve("returning stuff: " + stuff);
         }
     
     }
@@ -58,23 +58,83 @@ or restarting the application will clear the cache.
 This will result in the following output:
 
     /** @output
-    *  calling: books
-    *  calling: cds
-    *  returning: books
-    *  returning: books
-    *  returning: cds
-    *  returning: cds
+    *  calling stuff: books
+    *  calling stuff: cds
+    *  returning stuff: books
+    *  returning stuff: books
+    *  returning stuff: cds
+    *  returning stuff: cds
     */
     
 As you can see the actual method is only called twice, while returning four times. It's magic!
+    
+*Usage with `@CacheContainer` and the `MethodCacheProvider`:*
+
+
+    import {MemoryCache, CacheContainer, MethodCacheProvider} from "ts-method-cache";
+    
+    @CacheContainer({key: 'TestContainer'})
+    export class HttpServiceWithCacheContainer {
+    
+        @MemoryCache()
+        public getStuff(stuff: string): Promise<string> {
+           console.log("calling stuff: ", stuff);
+           return Promise.resolve("returning: " + stuff);
+        }
+    
+         @MemoryCache()
+         public getOtherStuff(otherStuff: string): Promise<string> {
+            console.log("calling otherStuff: ", stuff);
+            return Promise.resolve("returning otherStuff: " + otherStuff);
+         }
+     
+   }
+    
+    let service: HttpServiceWithCacheContainer = new HttpServiceWithCacheContainer();
+    let provider: MethodCacheProvider = new MethodCacheProvider();
+    
+    service.getStuff("books").then(console.log);
+    service.getOtherStuff("cds").then(console.log);
+    
+    setTimeout(() => {
+    
+        provider.clearMemoryContainer('TestContainer');
+        service.getStuff("books").then(console.log);
+        service.getOtherStuff("cds").then(console.log);
+    
+    });
+
+This will result in the following output:
+   
+   /** @output
+   *  calling stuff: books
+   *  calling otherStuff: cds
+   *  returning stuff: books
+   *  returning otherStuff: cds
+   *  calling stuff: books
+   *  calling otherStuff: cds
+   *  returning stuff: books
+   *  returning otherStuff: cds
+   */
+       
+As you can see the entire cache of the container is cleared using `clearMemoryContainer` and the original method is
+called again and stored in the cache.
+
+The `MethodCacheProvider` has several nice methods you can use, where for now the only available `CacheType` the 
+`CacheType.Memory` is:
+
+    clearAllCache(): void;
+    clearCache(type: CacheType): void;
+    clearContainer(type: CacheType, container: string): void;
+    clearKeyCache(type: CacheType, key: string): void;
+    clearMemoryContainer(container: string): void;
+    clearMemoryCache(): void;
+    clearMemoryKeyCache(key: string): void;
+
 
 ## Todo
 
 This is obviously very much a prototype and there is still a lot of work to be done:
 
-- Expose service to clear and maintain cache
-- Create logic to clear certain cache by key
-- Create `@CacheContainer()` decorator
-- Create logic to clear certain cache by container
 - Different caching strategies (`@SessionCache()`, `@StorageCache()`, `@UserCache()`)
 - Add TTL option
