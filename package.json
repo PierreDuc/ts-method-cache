@@ -1,0 +1,43 @@
+{
+  "name": "ts-method-cache",
+  "version": "0.0.1",
+  "license": "Apache License",
+  "author": {
+    "name": "Poul Kruijt",
+    "email": "poulkruijt@gmail.com"
+  },
+  "engines": {
+    "node": ">= 5.4.1"
+  },
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:PierreDuc/ts-method-cache.git"
+  },
+  "homepage": "https://github.com/PierreDuc/ts-method-cache/",
+  "bugs": "https://github.com/PierreDuc/ts-method-cache/issues",
+  "description": "Data method caching logic based on TypeScript decorators",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "types": "dist/index.d.ts",
+  "private": false,
+  "keywords": [
+    "cache",
+    "memory",
+    "typescript",
+    "http",
+    "method"
+  ],
+  "dependencies": {
+    "reflect-metadata": "0.1.10"
+  },
+  "peerDependencies": {
+    "typescript": "^2.3.2"
+  },
+  "devDependencies": {
+    "typescript": "^2.3.2",
+    "@types/node": "^7.0.22"
+  }
+}

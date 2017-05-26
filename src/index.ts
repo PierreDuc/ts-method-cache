@@ -1,0 +1,1 @@
+export {MemoryCache} from "./decorator/memory-cache.decorator";

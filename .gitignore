@@ -1,0 +1,11 @@
+logs
+*.log
+npm-debug.log*
+.idea/
+node_modules/
+.npm
+.eslintcache
+.node_repl_history
+*.tgz
+.yarn-integrity
+.env
