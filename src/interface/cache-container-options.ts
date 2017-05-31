@@ -1,5 +1,3 @@
-export interface CacheContainerOptions {
+import {CacheOptions} from "./cache-options";
 
-    key: string;
-
-}
+export interface CacheContainerOptions extends CacheOptions {}

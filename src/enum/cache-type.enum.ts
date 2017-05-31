@@ -1,5 +1,5 @@
 export enum CacheType {
-    Memory,
+    Memory = 1,
     Session,
     Storage
 }

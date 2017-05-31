@@ -1,15 +1,14 @@
-import {CacheOptions} from "../interface/cache-options";
 import {createCacheDecorator, normalizeCacheSettings} from "../util/decorator.util";
 import {CacheType} from "../enum/cache-type.enum";
-import {MemoryCacheOptions} from "../interface/memory-cache-options";
+import {StorageCacheOptions} from "../interface/storage-cache-options";
 
-export function MemoryCache<T extends Function>(options?: MemoryCacheOptions|string): MethodDecorator {
+export function SessionCache<T extends Function>(options?: StorageCacheOptions | string): MethodDecorator {
 
     return (target: any, method: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> => {
 
         options = normalizeCacheSettings(options!, method);
 
-        descriptor.value = <T>createCacheDecorator(CacheType.Memory, target, <Function>descriptor.value, options);
+        descriptor.value = <T>createCacheDecorator(CacheType.Session, target, <Function>descriptor.value, options);
 
         return descriptor;
 

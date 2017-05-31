@@ -1,10 +1,12 @@
 import {CacheType} from "../enum/cache-type.enum";
 import {getMethodCacheProvider} from "../resolver/method-cache-provider.resolver";
 
-export class MethodCacheProvider {
+export class MethodCacheService {
 
     public clearAllCache(): void {
         this.clearMemoryCache();
+        this.clearStorageCache();
+        this.clearSessionCache();
     }
 
     public clearCache(type: CacheType): void {
@@ -12,7 +14,7 @@ export class MethodCacheProvider {
     }
 
     public clearContainer(type: CacheType, container: string): void {
-        getMethodCacheProvider(type).clearContainer(container);
+        getMethodCacheProvider(type).clearKeyContainer(container);
     }
 
     public clearKeyCache(type: CacheType, key: string): void {
@@ -29,6 +31,30 @@ export class MethodCacheProvider {
 
     public clearMemoryKeyCache(key: string): void {
         this.clearKeyCache(CacheType.Memory, key);
+    }
+
+    public clearStorageContainer(container: string): void {
+        this.clearContainer(CacheType.Storage, container);
+    }
+
+    public clearStorageCache(): void {
+        this.clearCache(CacheType.Storage);
+    }
+
+    public clearStorageKeyCache(key: string): void {
+        this.clearKeyCache(CacheType.Storage, key);
+    }
+
+    public clearSessionContainer(container: string): void {
+        this.clearContainer(CacheType.Session, container);
+    }
+
+    public clearSessionCache(): void {
+        this.clearCache(CacheType.Session);
+    }
+
+    public clearSessionKeyCache(key: string): void {
+        this.clearKeyCache(CacheType.Session, key);
     }
 
 }

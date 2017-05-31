@@ -2,14 +2,15 @@ import 'reflect-metadata';
 import {CacheContainerOptions} from "../interface/cache-container-options";
 import {CacheContainerKey} from "../constant/decorator-keys.constant";
 import {createGUID} from "../util/string.util";
+import {normalizeCacheSettings} from "../util/decorator.util";
 
-export function CacheContainer<TFunction extends Function>(options: CacheContainerOptions): ClassDecorator {
+export function CacheContainer<TFunction extends Function>(options: CacheContainerOptions|string): ClassDecorator {
 
-    const key: string = options && options.key || createGUID();
+    options = normalizeCacheSettings(options);
 
     return function(target: TFunction): TFunction {
 
-        Reflect.defineMetadata(CacheContainerKey, key, target);
+        Reflect.defineMetadata(CacheContainerKey, options, target);
 
         return target;
     }

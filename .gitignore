@@ -10,3 +10,5 @@ src/.demo/
 *.tgz
 .yarn-integrity
 .env
+dist/
+ts-mc-local-storage/

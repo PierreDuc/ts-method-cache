@@ -4,3 +4,4 @@ src/
 dist/__demo/
 .npmignore
 .gitignore
+ts-mc-local-storage/

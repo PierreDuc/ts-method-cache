@@ -1,7 +1,11 @@
+import {CacheReturnType} from "../enum/cache-return-type.enum";
+
 export interface CacheOptions {
 
-    immutable?: boolean;
+    key?: string;
 
-    key: string;
+    ttl?: string|number|Date;
+
+    returnType?: CacheReturnType
 
 }

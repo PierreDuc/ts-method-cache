@@ -1,38 +1,53 @@
 import 'reflect-metadata';
+import * as CircularJSON from 'circular-json';
 import {CacheType} from "../enum/cache-type.enum";
 import {CacheOptions} from "../interface/cache-options";
-import {CacheProvider} from "../interface/cache-provider";
 import {createGUID} from "./string.util";
 import {CacheContainerKey} from "../constant/decorator-keys.constant";
 import {getMethodCacheProvider} from "../resolver/method-cache-provider.resolver";
+import {CacheReturnType} from "../enum/cache-return-type.enum";
+import {CacheContainerOptions} from "../interface/cache-container-options";
+import {CacheObject} from "../object/cache.object";
+import {BaseCacheProvider} from "../provider/base-cache.provider";
 
-export function createCacheDecorator(type: CacheType, target: Object, method: Function, options?: CacheOptions|string): Function {
+export function createCacheDecorator(type: CacheType, target: Object, method: Function, options: CacheOptions): Function {
 
-    if (typeof options === 'string') {
-        options = {key: options};
-    }
+    const provider: BaseCacheProvider = getMethodCacheProvider(type);
 
-    const key: string = options && options.key || createGUID();
-
-    const provider: CacheProvider = getMethodCacheProvider(type);
-
-    let container: string;
+    let container: CacheContainerOptions;
 
     return function(...args: any[]) {
 
-        const argsString = JSON.stringify(args) || 'void';
+        const argsString = CircularJSON.stringify(args) || 'void';
 
-        if (!provider.hasCache(key, argsString)) {
+        let cacheObject: CacheObject = provider.getCacheObject(options.key!);
 
-            //MethodDecorators are set before ClassDecorators, which means we have to get the container key right here,
-            //instead of in the outer scope. But once we got it, there is no need to keep on getting it
-
+        if (!cacheObject) {
             container = container || Reflect.getMetadata(CacheContainerKey, target.constructor);
-
-            provider.setCache(key, argsString, method.call(this, args));
-            provider.addToContainer(container, key);
+            cacheObject = provider.createCacheObject(options);
+            if (container) {
+                provider.addToContainer(container, cacheObject);
+            }
+        } else if(cacheObject.isExpired(argsString)) {
+            provider.clearCacheArgs(cacheObject, argsString);
         }
 
-        return provider.getCache(key, argsString);
+        if(!cacheObject.hasCache(argsString)) {
+            provider.setCache(options, argsString, method.call(this, args));
+        }
+
+        return cacheObject.getCache(argsString);
     };
+}
+
+export function normalizeCacheSettings(options: CacheOptions|string): CacheOptions {
+    if (typeof options === 'string') {
+        options = {key: options};
+    } else if (!options) {
+        options = {key: ''};
+    }
+    if (!options.key) {
+        options.key = createGUID();
+    }
+    return options;
 }
