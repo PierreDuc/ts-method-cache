@@ -6,7 +6,7 @@ export function SessionCache<T extends Function>(options?: StorageCacheOptions |
 
     return (target: any, method: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T> => {
 
-        options = normalizeCacheSettings(options!, method);
+        options = normalizeCacheSettings(options!);
 
         descriptor.value = <T>createCacheDecorator(CacheType.Session, target, <Function>descriptor.value, options);
 
