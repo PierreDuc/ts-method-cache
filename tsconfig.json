@@ -16,10 +16,12 @@
     "stripInternal": true,
     "typeRoots": ["./node_modules/@types"],
     "types": [
-      "node"
+      "node",
+      "jasmine"
     ],
     "lib": [
-      "es2015","dom"
+      "es2016",
+      "dom"
     ]
   },
   "compileOnSave": true,

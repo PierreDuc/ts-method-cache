@@ -1,7 +1,10 @@
+import "rxjs/add/operator/toPromise";
+import {Observable} from "rxjs/Observable";
+import {Subscriber} from "rxjs/Subscriber";
 import {CacheReturnType} from "../enum/cache-return-type.enum";
-import {CacheOptions} from "../interface/cache-options";
-import {CacheContainerObject} from "./cache-container.object";
 import {CacheContainerOptions} from "../interface/cache-container-options";
+import {CacheOptions} from "../interface/cache-options";
+import {StorageCacheObject} from "../interface/storage-cache-object";
 
 export class CacheObject {
 
@@ -21,8 +24,7 @@ export class CacheObject {
     }
 
     public clear(): void {
-        this.items = {};
-        this.ttl = {};
+        Object.keys(this.items).forEach(args => this.clearArgs(args));
     }
 
     public clearArgs(args: string): void {
@@ -38,6 +40,9 @@ export class CacheObject {
         let items: { [args: string]: any } = {};
         await Promise.all(Object.keys(this.items).map(async (item: string) => {
             switch (this.returnType) {
+                case CacheReturnType.Observable:
+                    items[item] = await this.items[item].toPromise();
+                    break;
                 case CacheReturnType.Promise:
                     items[item] = await this.items[item];
                     break;
@@ -49,19 +54,11 @@ export class CacheObject {
         return items;
     }
 
-    public getTtl(): { [args: string]: number } {
-        return this.ttl;
-    }
-
     public hasCache(args: string): boolean {
         return this.items.hasOwnProperty(args);
     }
 
-    public isExpired(args: string): boolean {
-        return this.ttl.hasOwnProperty(args) && this.ttl[args] < new Date().getTime();
-    }
-
-    public mergeOptions(options: CacheContainerOptions): void {
+    public inheritContainerOptions(options: CacheContainerOptions): void {
         if (!this.options.returnType) {
             this.options.returnType = options.returnType;
         }
@@ -70,10 +67,20 @@ export class CacheObject {
         }
     }
 
+    public isExpired(args: string): boolean {
+        return this.ttl.hasOwnProperty(args) && this.ttl[args] < Date.now();
+    }
+
     public restoreCacheObject(items: { [args: string]: any }, ttl: { [args: string]: number }): void {
         this.items = {};
         Object.keys(items).forEach((item: string) => {
             switch (this.returnType) {
+                case CacheReturnType.Observable:
+                    this.items[item] = Observable.create((observer: Subscriber<string>) => {
+                        observer.next(items[item]);
+                        observer.complete();
+                    });
+                    break;
                 case CacheReturnType.Promise:
                     this.items[item] = Promise.resolve(items[item]);
                     break;
@@ -87,13 +94,14 @@ export class CacheObject {
 
     public setCache(args: string, cache: any): void {
         this.items[args] = cache;
-        this.setTtl(args);
+        this.setArgsTtl(args);
     }
 
-    public setTtl(args: string): void {
-        let ttl: number = this.getTtlFromOptions()!;
-        if (ttl) {
-            this.ttl[args] = ttl;
+    public async storeCacheObject(): Promise<StorageCacheObject> {
+        return {
+            items: await this.getStorageItems(),
+            ttl: this.ttl,
+            options: this.options
         }
     }
 
@@ -102,9 +110,16 @@ export class CacheObject {
         if (typeof ttl === 'string' && ttl.length > 0) {
             return new Date(ttl).getTime();
         } else if (typeof ttl === 'number' && ttl > 0) {
-            return new Date().getTime() + 1000 * ttl;
+            return Date.now() + 1000 * ttl;
         } else if (ttl instanceof Date) {
             return ttl.getTime();
+        }
+    }
+
+    private setArgsTtl(args: string): void {
+        let ttl: number = this.getTtlFromOptions()!;
+        if (ttl) {
+            this.ttl[args] = ttl;
         }
     }
 }

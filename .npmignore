@@ -5,3 +5,7 @@ dist/__demo/
 .npmignore
 .gitignore
 ts-mc-local-storage/
+karma.conf.js
+dist/**/*.spec.d.ts
+dist/**/*.spec.js
+tsconfig.json

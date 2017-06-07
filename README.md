@@ -1,7 +1,13 @@
 # TypeScript Method Cache
 
 Method cache using decorators for TypeScript. This comes in handy for a quick and easy to implement caching mechanism 
-for obtaining static data from an API or other databases.
+for obtaining static data from an API or other databases. 
+
+The current storage methods are:
+
+- Memory Cache *clears after browser refresh or restart*
+- Session Cache *clears after closing the browser (cannot be used inside node)*
+- Storage Cache *clears after clearing the storage (uses node-localstorage inside node)*
 
 ## Prerequisites
 
@@ -11,27 +17,47 @@ Enable `emitDecoratorMetadata` and `experimentalDecorators` in your `tsconfig.js
       "compilerOptions": {
         ...
         "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        ...
+        "experimentalDecorators": true
+      }
     }
     
-## Limitations
-
-It's not possible to store complex objects using `StorageCache` or `SessionCache`. If the object stored has methods or
-any other fancy stuff, this will likely not work. You can however store objects with cyclic dependencies, parsing is 
-done using CircularJSON.
-
-As for now, the only complex return type possible for cache based on Storage is `Promise`. 
-
 ## Installation
 
 Install the module using npm:
 
     npm install ts-method-cache --save
     
-    
-## Usage/API
+## Examples
 
+### Simple usage:
+
+
+    import {MemoryCache} from "ts-method-cache";
+    
+    export class HttpServiceWithCache {
+    
+        @MemoryCache()
+        public getBar(foo: string): Promise<string> {
+           return Promise.resolve(stuff + 'bar');
+        }
+    
+    }
+
+>No changes are needed inside your code to cache the returned value. Only add the decorator to your method, and the return
+value is cached
+    
+## Limitations
+
+It's not possible to store complex objects using `StorageCache` or `SessionCache`, like it is using `MemoryCache`. If 
+the object stored has methods or any other fancy stuff, this will likely not work. You can however store objects with 
+cyclic dependencies, because parsing is done using CircularJSON.
+
+As for now, the only complex return types possible for cache based on Storage is `Promise` and `Observable`. By using 
+`Observable` the value gets immediately emitted during a `.subscribe()` 
+
+   
+    
+## API
 
 ### `CacheType`
 
@@ -73,8 +99,7 @@ The number is in seconds, and indicates how many seconds the cache is allowed to
     
 The `returnType` only has effect on the `@SessionCache` and `@StorageCache` decorators. Because it is impossible to save
 the entire `Promise` object inside a Storage object you should tell the decorator your method is returning a certain 
-type. As for now only the Promise type and Static type are supported. Again, this just applies to the Session and 
-Storage cache.
+type.
 
 ### `MethodCacheService`
 
@@ -204,7 +229,7 @@ only twice, because this cache expires after 5 seconds.
 
 The `clearMemoryContainer` clears all the cache present in the `CacheContainer`.
 
-###`@SessionCache(options?: CacheOptions | string)`
+###`@SessionCache(options: CacheOptions | string)`
 
 This uses the browser's native `SessionStorage`. Therefor it is limited to the browser environment only. And with it comes
 the limitations of storage. You can only store static objects or Promises using this decorator. To store a promise, set 
@@ -214,11 +239,7 @@ You can also set the `returnType` as part of a `CacheContainer`. A method decora
 
 The rest is the same as `@MethodCache`
 
-###`@StorageCache(options?: CacheOptions | string)`
+###`@StorageCache(options: CacheOptions | string)`
 The same as `@SessionCache`, but instead of the browser's native `SessionStorage` it uses the `LocalStorage` of the 
 browser. If there is no `LocalStorage`, because you are running in a node environment, the `node-localstorage` package
 is used.
-
-## @todo
-
-- Support for Observable storage in `@StorageCache` and `@SessionCache`

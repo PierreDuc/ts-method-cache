@@ -1,4 +1,4 @@
-import * as CircularJSON from 'circular-json';
+import * as CircularJSON from "circular-json";
 import {LocalStorageCacheKey, LocalStorageContainerKey} from "../constant/storage-keys.constant";
 import {CacheContainerOptions} from "../interface/cache-container-options";
 import {StorageCacheObject} from "../interface/storage-cache-object";
@@ -67,7 +67,6 @@ export class SessionCacheProvider extends BaseCacheProvider {
         let cacheObjects: StorageCacheObject[] = CircularJSON.parse(this.storage.getItem(LocalStorageCacheKey)!);
         let containerObjects: StorageContainerObject[] = CircularJSON.parse(this.storage.getItem(LocalStorageContainerKey)!);
 
-
         if (cacheObjects && Array.isArray(cacheObjects)) {
             cacheObjects.forEach(cacheObject => this.cache.push(new CacheObject(cacheObject.options)));
         } else {
@@ -92,18 +91,10 @@ export class SessionCacheProvider extends BaseCacheProvider {
                 cache.restoreCacheObject(cacheObject.items, cacheObject.ttl);
             });
         }
-
     }
 
     private async saveCache(): Promise<void> {
-        let storageCache: StorageCacheObject[] = await Promise.all(this.cache.map(async (cache: CacheObject) => {
-            return {
-                items: await cache.getStorageItems(),
-                ttl: cache.getTtl(),
-                options: cache.options
-            }
-        }));
-
+        let storageCache: StorageCacheObject[] = await Promise.all(this.cache.map(async cache => await cache.storeCacheObject()));
         this.storage.setItem(LocalStorageCacheKey, CircularJSON.stringify(storageCache));
     }
 

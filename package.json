@@ -1,6 +1,6 @@
 {
   "name": "ts-method-cache",
-  "version": "0.2.0",
+  "version": "1.0.1",
   "license": "Apache License",
   "author": {
     "name": "Poul Kruijt",
@@ -20,7 +20,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "demo": "node dist/__demo/demo"
+    "test": "karma start"
   },
   "types": "dist/index.d.ts",
   "private": false,
@@ -34,15 +34,23 @@
   "dependencies": {
     "circular-json": "^0.3.1",
     "node-localstorage": "^1.3.0",
-    "reflect-metadata": "0.1.10",
+    "reflect-metadata": "^0.1.10",
     "rxjs": "^5.4.0"
   },
   "peerDependencies": {
     "typescript": "^2.2.0"
   },
   "devDependencies": {
-    "@types/circular-json": "^0.1.30",
-    "@types/node": "^7.0.22",
-    "typescript": "^2.3.2"
-  }
+    "@types/circular-json": "0.1.30",
+    "@types/jasmine": "2.5.51",
+    "@types/node": "7.0.28",
+    "jasmine-core": "2.6.2",
+    "karma": "1.7.0",
+    "karma-chrome-launcher": "2.1.1",
+    "karma-cli": "1.0.1",
+    "karma-jasmine": "1.1.0",
+    "karma-typescript": "3.0.3",
+    "typescript": "2.3.4"
+  },
+  "false": {}
 }

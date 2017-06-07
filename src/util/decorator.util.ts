@@ -1,24 +1,23 @@
-import 'reflect-metadata';
-import * as CircularJSON from 'circular-json';
-import {CacheType} from "../enum/cache-type.enum";
-import {CacheOptions} from "../interface/cache-options";
-import {createGUID} from "./string.util";
+import * as CircularJSON from "circular-json";
+import "reflect-metadata";
 import {CacheContainerKey} from "../constant/decorator-keys.constant";
-import {getMethodCacheProvider} from "../resolver/method-cache-provider.resolver";
-import {CacheReturnType} from "../enum/cache-return-type.enum";
+import {CacheType} from "../enum/cache-type.enum";
 import {CacheContainerOptions} from "../interface/cache-container-options";
+import {CacheOptions} from "../interface/cache-options";
 import {CacheObject} from "../object/cache.object";
 import {BaseCacheProvider} from "../provider/base-cache.provider";
+import {getMethodCacheProvider} from "../resolver/method-cache-provider.resolver";
+import {createGUID} from "./string.util";
 
-export function createCacheDecorator(type: CacheType, target: Object, method: Function, options: CacheOptions): Function {
+export function createCacheDecorator<T extends Function>(type: CacheType, target: Object, method: T, options: CacheOptions): T {
 
     const provider: BaseCacheProvider = getMethodCacheProvider(type);
 
     let container: CacheContainerOptions;
 
-    return function(...args: any[]) {
+    return <any>function (...args: any[]): any {
 
-        const argsString = CircularJSON.stringify(args) || 'void';
+        const argsString: string = CircularJSON.stringify(args) || 'void';
 
         let cacheObject: CacheObject = provider.getCacheObject(options.key!);
 
@@ -28,11 +27,11 @@ export function createCacheDecorator(type: CacheType, target: Object, method: Fu
             if (container) {
                 provider.addToContainer(container, cacheObject);
             }
-        } else if(cacheObject.isExpired(argsString)) {
+        } else if (cacheObject.isExpired(argsString)) {
             provider.clearCacheArgs(cacheObject, argsString);
         }
 
-        if(!cacheObject.hasCache(argsString)) {
+        if (!cacheObject.hasCache(argsString)) {
             provider.setCache(options, argsString, method.call(this, args));
         }
 
@@ -40,11 +39,11 @@ export function createCacheDecorator(type: CacheType, target: Object, method: Fu
     };
 }
 
-export function normalizeCacheSettings(options: CacheOptions|string): CacheOptions {
+export function normalizeCacheSettings<U extends CacheOptions>(options: U | string): U {
     if (typeof options === 'string') {
-        options = {key: options};
+        options = <U>{key: options};
     } else if (!options) {
-        options = {key: ''};
+        options = <U>{key: ''};
     }
     if (!options.key) {
         options.key = createGUID();
