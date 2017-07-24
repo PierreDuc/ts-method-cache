@@ -7,7 +7,7 @@ The current storage methods are:
 
 - Memory Cache *clears after browser refresh or restart*
 - Session Cache *clears after closing the browser (cannot be used inside node)*
-- Storage Cache *clears after clearing the storage (uses node-localstorage inside node)*
+- Storage Cache *clears after clearing the storage (cannot be used inside node)*
 
 ## Prerequisites
 
@@ -49,11 +49,9 @@ value is cached
 ## Limitations
 
 It's not possible to store complex objects using `StorageCache` or `SessionCache`, like it is using `MemoryCache`. If 
-the object stored has methods or any other fancy stuff, this will likely not work. You can however store objects with 
-cyclic dependencies, because parsing is done using CircularJSON.
+the object stored has methods or any other fancy stuff, this will likely not work.
 
-As for now, the only complex return types possible for cache based on Storage is `Promise` and `Observable`. By using 
-`Observable` the value gets immediately emitted during a `.subscribe()` 
+As for now, the only complex return types possible for cache based on Storage is a `Promise`. 
 
    
     
@@ -74,7 +72,6 @@ Enum representing the different Cache Return Types (Only used in Storage cache, 
 
     CacheType.Static
     CacheType.Promise
-    CacheType.Observable (work in progress)
 
 
 ### `CacheOptions` 
@@ -98,8 +95,8 @@ The number is in seconds, and indicates how many seconds the cache is allowed to
     returnType?: CacheReturnType
     
 The `returnType` only has effect on the `@SessionCache` and `@StorageCache` decorators. Because it is impossible to save
-the entire `Promise` object inside a Storage object you should tell the decorator your method is returning a certain 
-type.
+the entire `Promise` object inside a Storage object you should tell the decorator your method is returning a `Promise`
+by setting this to `CacheReturnType.Promise`.
 
 ### `MethodCacheService`
 
@@ -241,5 +238,4 @@ The rest is the same as `@MethodCache`
 
 ###`@StorageCache(options: CacheOptions | string)`
 The same as `@SessionCache`, but instead of the browser's native `SessionStorage` it uses the `LocalStorage` of the 
-browser. If there is no `LocalStorage`, because you are running in a node environment, the `node-localstorage` package
-is used.
+browser. This can only be used inside the browser.

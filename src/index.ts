@@ -1,11 +1,11 @@
-export {MemoryCache} from "./decorator/memory-cache.decorator";
-export {SessionCache} from "./decorator/session-cache.decorator";
-export {StorageCache} from "./decorator/storage-cache.decorator";
-export {CacheContainer} from "./decorator/cache-container.decorator";
+export {MemoryCache} from "./cache/memory/decorator/memory-cache.decorator";
+export {SessionCache} from "./cache/session/decorator/session-cache.decorator";
+export {StorageCache} from "./cache/storage/decorator/storage-cache.decorator";
+export {CacheContainer} from "./core/decorator/cache-container.decorator";
 
-export {MemoryCacheOptions} from "./interface/memory-cache-options";
-export {StorageCacheOptions} from "./interface/storage-cache-options";
+export {MemoryCacheOptions} from "./cache/memory/interface/memory-cache-options";
+export {StorageCacheOptions} from "./cache/storage/interface/storage-cache-options";
 
-export {CacheReturnType} from "./enum/cache-return-type.enum";
+export {CacheReturnType} from "./core/enum/cache-return-type.enum";
 
-export {MethodCacheService} from "./service/method-cache.service";
+export {MethodCacheService} from "./core/service/method-cache.service";
