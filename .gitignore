@@ -12,3 +12,4 @@ src/.demo/
 .env
 dist/
 ts-mc-local-storage/
+coverage
