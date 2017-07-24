@@ -11,12 +11,11 @@ The current storage methods are:
 
 ## Prerequisites
 
-Enable `emitDecoratorMetadata` and `experimentalDecorators` in your `tsconfig.json`
+Enable `experimentalDecorators` in your `tsconfig.json`
 
     {
       "compilerOptions": {
-        ...
-        "emitDecoratorMetadata": true,
+        ...,
         "experimentalDecorators": true
       }
     }
@@ -49,7 +48,7 @@ value is cached
 ## Limitations
 
 It's not possible to store complex objects using `StorageCache` or `SessionCache`, like it is using `MemoryCache`. If 
-the object stored has methods or any other fancy stuff, this will likely not work.
+the object stored has methods or any other fancy stuff, this will most likely not work.
 
 As for now, the only complex return types possible for cache based on Storage is a `Promise`. 
 
@@ -169,7 +168,7 @@ has a mandatory input which can be a key, or a `CacheOptions` object. If you def
 these values will be used as default values for the method decorators.
 
     
-###`@MemoryCache` usage with `@CacheContainer`, `CacheOptions` and the `MethodCacheService`:
+### `@MemoryCache` usage with `@CacheContainer`, `CacheOptions` and the `MethodCacheService`:
 
 
     @CacheContainer({key: 'TestContainer', ttl: 1})
@@ -226,7 +225,7 @@ only twice, because this cache expires after 5 seconds.
 
 The `clearMemoryContainer` clears all the cache present in the `CacheContainer`.
 
-###`@SessionCache(options: CacheOptions | string)`
+### `@SessionCache(options: CacheOptions | string)`
 
 This uses the browser's native `SessionStorage`. Therefor it is limited to the browser environment only. And with it comes
 the limitations of storage. You can only store static objects or Promises using this decorator. To store a promise, set 
@@ -236,6 +235,6 @@ You can also set the `returnType` as part of a `CacheContainer`. A method decora
 
 The rest is the same as `@MethodCache`
 
-###`@StorageCache(options: CacheOptions | string)`
+### `@StorageCache(options: CacheOptions | string)`
 The same as `@SessionCache`, but instead of the browser's native `SessionStorage` it uses the `LocalStorage` of the 
 browser. This can only be used inside the browser.
