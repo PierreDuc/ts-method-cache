@@ -11,7 +11,7 @@ describe('Cache container decorator is properly set', () => {
     }
 
     it("should have a cache container options where the key equals the passed key", () => {
-        let options: CacheContainerOptions = getCacheContainer(TestCache);
+        let options: CacheContainerOptions = getCacheContainer(TestCache) as CacheContainerOptions;
         expect(options.key).toEqual(key);
     });
 

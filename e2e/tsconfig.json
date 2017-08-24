@@ -4,35 +4,32 @@
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
-    "declaration": true,
+    "declaration": false,
     "noImplicitAny": false,
     "strictNullChecks": true,
     "sourceMap": false,
     "experimentalDecorators": true,
     "outDir": "./dist",
-    "rootDir": "./src",
     "skipLibCheck": true,
     "stripInternal": true,
     "typeRoots": ["./node_modules/@types"],
     "types": [
-      "node",
-      "jasmine"
+      "node"
     ],
     "lib": [
-      "es2017",
-      "dom"
+      "es2017", "dom"
     ]
   },
-  "compileOnSave": true,
+  "compileOnSave": false,
   "buildOnSave": false,
-  "includeDefinition": [
-    "./src/**/*"
+  "files": [
+    "src/index.ts"
   ],
   "exclude": [
-    ".idea",
-    "e2e",
-    "dist",
-    "coverage",
-    "node_modules"
-  ]
+  ".idea",
+  "e2e",
+  "dist",
+  "coverage",
+  "node_modules"
+]
 }

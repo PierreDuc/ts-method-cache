@@ -1,6 +1,6 @@
 {
   "name": "ts-method-cache",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "license": "Apache License",
   "author": {
     "name": "Poul Kruijt",
@@ -29,7 +29,9 @@
     "memory",
     "typescript",
     "http",
-    "method"
+    "method",
+    "storage",
+    "session"
   ],
   "peerDependencies": {
     "typescript": "^2.2.0"

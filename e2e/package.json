@@ -1,0 +1,14 @@
+{
+  "name": "test-ts-method-cache",
+  "version": "0.1.2",
+  "dependencies": {
+    "rxjs": "^5.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^7.0.39",
+    "typescript": "^2.4.2"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  }
+}

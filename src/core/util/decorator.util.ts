@@ -10,26 +10,23 @@ export function createCacheDecorator<T extends Function>(type: CacheType, target
 
     const provider: BaseCacheProvider = getMethodCacheProvider(type);
 
-    let container: CacheContainerOptions;
+    let cacheObject: BaseCacheObject = provider.getCacheObject(options.key!) || provider.createCacheObject(options);
+
+    let container: CacheContainerOptions|undefined|null = null;
 
     return <any>function (...args: any[]): any {
 
         const argsString: string = JSON.stringify(args) || 'void';
 
-        let cacheObject: BaseCacheObject = provider.getCacheObject(options.key!);
-
-        if (!cacheObject) {
-            container = container || getCacheContainer(target.constructor);
-            cacheObject = provider.createCacheObject(options);
+        if (container === null) {
+            container = getCacheContainer(target.constructor);
             if (container) {
                 provider.addToContainer(container, cacheObject);
             }
-        } else if (cacheObject.isExpired(argsString)) {
-            provider.clearCacheArgs(cacheObject, argsString);
         }
 
-        if (!cacheObject.hasCache(argsString)) {
-            provider.setCache(options, argsString, method.call(this, args));
+        if (!cacheObject.hasCache(argsString) || cacheObject.isExpired(argsString)) {
+            provider.setCache(options, argsString, method.call(this, ...args));
         }
 
         return cacheObject.getCache(argsString);

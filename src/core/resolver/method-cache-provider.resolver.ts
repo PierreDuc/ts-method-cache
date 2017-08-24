@@ -35,6 +35,6 @@ export function setCacheContainer<T extends Function>(container: T, options: Cac
     }
 }
 
-export function getCacheContainer<T extends Function>(container: T): CacheContainerOptions {
-    return <CacheContainerOptions>containers.get(container);
+export function getCacheContainer<T extends Function>(container: T): CacheContainerOptions|undefined {
+    return containers.get(container);
 }
