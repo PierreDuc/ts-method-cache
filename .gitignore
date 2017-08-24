@@ -13,3 +13,4 @@ src/.demo/
 dist/
 ts-mc-local-storage/
 coverage
+e2e/package-lock.json

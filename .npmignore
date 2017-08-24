@@ -10,3 +10,4 @@ dist/**/*.spec.d.ts
 dist/**/*.spec.js
 tsconfig.json
 coverage
+e2e
