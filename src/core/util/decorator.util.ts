@@ -1,61 +1,62 @@
-import {CacheType} from "../enum/cache-type.enum";
-import {CacheContainerOptions} from "../interface/cache-container-options";
-import {BaseCacheOptions} from "../interface/base-cache-options";
-import {BaseCacheObject} from "../object/base-cache.object";
-import {BaseCacheProvider} from "../provider/base-cache.provider";
-import {getCacheContainer, getMethodCacheProvider, setCacheContainer} from "../resolver/method-cache-provider.resolver";
-import {createGUID} from "./string.util";
+import {CacheType} from '../enum/cache-type.enum';
+import {BaseCacheOptions} from '../interface/base-cache-options';
+import {CacheContainerOptions} from '../interface/cache-container-options';
+import {BaseCacheObject} from '../object/base-cache.object';
+import {BaseCacheProvider} from '../provider/base-cache.provider';
+import {getCacheContainer, getMethodCacheProvider, setCacheContainer} from '../resolver/method-cache-provider.resolver';
 
-export function createCacheDecorator<T extends Function>(type: CacheType, target: Object, method: T, options: BaseCacheOptions): T {
+import {createGUID} from './string.util';
 
-    const provider: BaseCacheProvider = getMethodCacheProvider(type);
+export function createCacheDecorator(type: CacheType, target: Object, method: Function, options: BaseCacheOptions): Function {
 
-    let cacheObject: BaseCacheObject = provider.getCacheObject(options.key!) || provider.createCacheObject(options);
+  const provider: BaseCacheProvider<BaseCacheObject<BaseCacheOptions>, BaseCacheOptions> = getMethodCacheProvider(type);
+  const cacheObject: BaseCacheObject<BaseCacheOptions> = provider.getCacheObject(options.key!) || provider.createCacheObject(options);
 
-    let container: CacheContainerOptions|undefined|null = null;
+  let container: CacheContainerOptions | undefined | null = null;
 
-    return <any>function (...args: any[]): any {
+  return function (this: Function, ...args: any[]): any {
 
-        const argsString: string = JSON.stringify(args) || 'void';
+    const argsString: string = JSON.stringify(args);
 
-        if (container === null) {
-            container = getCacheContainer(target.constructor);
-            if (container) {
-                provider.addToContainer(container, cacheObject);
-            }
-        }
+    if (container === null) {
+      container = getCacheContainer(target.constructor);
+      if (container) {
+        provider.addToContainer(container, cacheObject);
+      }
+    }
 
-        if (!cacheObject.hasCache(argsString) || cacheObject.isExpired(argsString)) {
-            provider.setCache(options, argsString, method.call(this, ...args));
-        }
+    if (!cacheObject.hasCache(argsString) || cacheObject.isExpired(argsString)) {
+      provider.setCache(options, argsString, method.call(this, ...args));
+    }
 
-        return cacheObject.getCache(argsString);
-    };
+    return cacheObject.getCache(argsString);
+  }
 }
 
 export function createCacheContainerDecorator(options: CacheContainerOptions): ClassDecorator {
 
-    return function (target: any): any {
+  return function (target: any): any {
+    setCacheContainer(target, options);
 
-        setCacheContainer(target, options);
-
-        return target;
-    }
+    return target;
+  }
 }
 
 export function normalizeCacheSettings<U extends BaseCacheOptions>(options: U | string): U {
-    if (typeof options === 'string') {
-        options = <U>{key: options};
-    } else if (!options) {
-        options = <U>{key: ''};
-    }
-    if (!options.key) {
-        options.key = createGUID();
-    }
 
-    return options;
+  if (typeof options === 'string') {
+    options = {key: options} as U;
+  } else if (!options) {
+    options = {key: ''} as U;
+  }
+  
+  if (!options.key) {
+    options.key = createGUID();
+  }
+
+  return options;
 }
 
-export function normalizeCacheContainerSettings(options: CacheContainerOptions|string): CacheContainerOptions {
-    return normalizeCacheSettings<CacheContainerOptions>(options);
+export function normalizeCacheContainerSettings(options: CacheContainerOptions | string): CacheContainerOptions {
+  return normalizeCacheSettings<CacheContainerOptions>(options);
 }

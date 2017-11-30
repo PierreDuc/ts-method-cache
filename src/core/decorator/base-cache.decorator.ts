@@ -1,16 +1,16 @@
 import {CacheType} from "../enum/cache-type.enum";
-import {createCacheDecorator, normalizeCacheSettings} from "../util/decorator.util";
 import {BaseCacheOptions} from "../interface/base-cache-options";
+import {createCacheDecorator, normalizeCacheSettings} from "../util/decorator.util";
 
 export function baseCacheDecorator<T extends BaseCacheOptions>(cacheType: CacheType, options?: T | string): MethodDecorator {
 
-    options = normalizeCacheSettings<T>(options!);
+  options = normalizeCacheSettings<T>(options!);
 
-    return (target: Object, method: string, descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> => {
+  return (target: object, method: string | symbol, descriptor: PropertyDescriptor): PropertyDescriptor => {
 
-        descriptor.value = createCacheDecorator(cacheType, target, descriptor.value!, options as T);
+    descriptor.value = createCacheDecorator(cacheType, target, descriptor.value!, options as T);
 
-        return descriptor;
+    return descriptor;
 
-    };
+  };
 }

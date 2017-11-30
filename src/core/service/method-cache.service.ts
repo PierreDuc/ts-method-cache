@@ -1,60 +1,65 @@
-import {CacheType} from "../enum/cache-type.enum";
-import {getMethodCacheProvider} from "../resolver/method-cache-provider.resolver";
+import {CacheType} from '../enum/cache-type.enum';
+import {getMethodCacheProvider} from '../resolver/method-cache-provider.resolver';
 
 export class MethodCacheService {
 
-    public clearAllCache(): void {
-        this.clearMemoryCache();
-        this.clearStorageCache();
-        this.clearSessionCache();
-    }
+  public clearAllCache(): void {
+    this.clearMemoryCache();
+    this.clearStorageCache();
+    this.clearSessionCache();
+  }
 
-    public clearMemoryCache(): void {
-        this.clearCache(CacheType.Memory);
-    }
+  public clearContainer(container: string): void {
+    this.clearMemoryContainer(container);
+    this.clearSessionContainer(container);
+    this.clearStorageContainer(container);
+  }
 
-    public clearMemoryContainer(container: string): void {
-        this.clearContainer(CacheType.Memory, container);
-    }
+  public clearMemoryCache(): void {
+    this.clearCache(CacheType.Memory);
+  }
 
-    public clearMemoryKeyCache(key: string): void {
-        this.clearKeyCache(CacheType.Memory, key);
-    }
+  public clearMemoryContainer(container: string): void {
+    this.clearContainerType(CacheType.Memory, container);
+  }
 
-    public clearSessionCache(): void {
-        this.clearCache(CacheType.Session);
-    }
+  public clearMemoryKeyCache(key: string): void {
+    this.clearKeyCache(CacheType.Memory, key);
+  }
 
-    public clearSessionContainer(container: string): void {
-        this.clearContainer(CacheType.Session, container);
-    }
+  public clearSessionCache(): void {
+    this.clearCache(CacheType.Session);
+  }
 
-    public clearSessionKeyCache(key: string): void {
-        this.clearKeyCache(CacheType.Session, key);
-    }
+  public clearSessionContainer(container: string): void {
+    this.clearContainerType(CacheType.Session, container);
+  }
 
-    public clearStorageCache(): void {
-        this.clearCache(CacheType.Storage);
-    }
+  public clearSessionKeyCache(key: string): void {
+    this.clearKeyCache(CacheType.Session, key);
+  }
 
-    public clearStorageContainer(container: string): void {
-        this.clearContainer(CacheType.Storage, container);
-    }
+  public clearStorageCache(): void {
+    this.clearCache(CacheType.Storage);
+  }
 
-    public clearStorageKeyCache(key: string): void {
-        this.clearKeyCache(CacheType.Storage, key);
-    }
+  public clearStorageContainer(container: string): void {
+    this.clearContainerType(CacheType.Storage, container);
+  }
 
-    private clearCache(type: CacheType): void {
-        getMethodCacheProvider(type).clearCache();
-    }
+  public clearStorageKeyCache(key: string): void {
+    this.clearKeyCache(CacheType.Storage, key);
+  }
 
-    private clearContainer(type: CacheType, container: string): void {
-        getMethodCacheProvider(type).clearKeyContainer(container);
-    }
+  private clearCache(type: CacheType): void {
+    getMethodCacheProvider(type).clearCache();
+  }
 
-    private clearKeyCache(type: CacheType, key: string): void {
-        getMethodCacheProvider(type).clearKeyCache(key);
-    }
+  private clearContainerType(type: CacheType, container: string): void {
+    getMethodCacheProvider(type).clearKeyContainer(container);
+  }
 
+  private clearKeyCache(type: CacheType, key: string): void {
+    getMethodCacheProvider(type).clearKeyCache(key);
+  }
 }

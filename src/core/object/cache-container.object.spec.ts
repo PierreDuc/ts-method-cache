@@ -1,36 +1,39 @@
-import {CacheContainerObject} from "./cache-container.object";
-import {BaseCacheObject} from "./base-cache.object";
+import {MemoryCacheObject} from '../../cache/memory/object/memory-cache.object';
+import {CacheContainerObject} from './cache-container.object';
 
 describe('Cache Container Object', () => {
 
-    let key: string = 'key';
+  const key: string = 'key';
+  const args: string = 'args';
+  const value: string = 'value';
 
-    let args: string = 'args';
+  let container: CacheContainerObject;
+  let cache: MemoryCacheObject;
 
-    let cache: string = 'cache';
+  beforeEach(() => {
+    container = new CacheContainerObject({key: key});
+    cache = new MemoryCacheObject({});
+    container.addCache(cache);
+  });
 
-    it('should contain the added cache object', () => {
-        let container: CacheContainerObject = new CacheContainerObject({key: key});
-        let cache: BaseCacheObject = new BaseCacheObject({});
-        container.addCache(cache);
-        expect(container.cacheObjects.length).toEqual(1);
-    });
+  it('should set the options key correctly', () => {
+    expect(container.key).toEqual(key);
+  });
 
-    it('should not add doubles', () => {
-        let container: CacheContainerObject = new CacheContainerObject({key: key});
-        let cache: BaseCacheObject = new BaseCacheObject({});
-        container.addCache(cache);
-        container.addCache(cache);
-        expect(container.cacheObjects.length).toEqual(1);
-    });
+  it('should contain the added cache object', () => {
+    expect(container.cacheObjects.length).toEqual(1);
+  });
 
-    it('should clear the contained cache objects', () => {
-        let container: CacheContainerObject = new CacheContainerObject({key: key});
-        let cache: BaseCacheObject = new BaseCacheObject({});
-        container.addCache(cache);
-        cache.setCache(args, cache);
-        expect(cache.getCache(args)).toEqual(cache);
-        container.clear();
-        expect(cache.hasCache(args)).toBeFalsy();
-    });
+  it('should not add doubles', () => {
+    container.addCache(cache);
+    expect(container.cacheObjects.length).toEqual(1);
+  });
+
+  it('should clear the contained cache objects', () => {
+    cache.setCache(args, value);
+    expect(cache.getCache(args)).toEqual(value);
+    
+    container.clear();
+    expect(cache.hasCache(args)).toBeFalsy();
+  });
 });

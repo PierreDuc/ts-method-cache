@@ -1,3 +1,5 @@
+[![npm](https://img.shields.io/npm/v/ts-method-cache.svg)](https://www.npmjs.com/package/ts-method-cache)
+
 # TypeScript Method Cache
 
 Method cache using decorators for TypeScript. This comes in handy for a quick and easy to implement caching mechanism 
@@ -50,9 +52,7 @@ value is cached
 It's not possible to store complex objects using `StorageCache` or `SessionCache`, like it is using `MemoryCache`. If 
 the object stored has methods or any other fancy stuff, this will most likely not work.
 
-As for now, the only complex return types possible for cache based on Storage is a `Promise`. 
-
-   
+The only complex return types possible for cache based on Storage is a `Promise`. 
     
 ## API
 
@@ -102,8 +102,7 @@ by setting this to `CacheReturnType.Promise`.
 Pretty self explanatory method names:
 
     clearAllCache(): void;
-    clearCache(type: CacheType): void;
-    clearContainer(type: CacheType, container: string): void;
+    clearContainer(container: string): void;
     clearKeyCache(type: CacheType, key: string): void;
     clearMemoryContainer(container: string): void;
     clearMemoryCache(): void;
@@ -141,7 +140,7 @@ created on the method.
     
     }
     
-    let service: HttpServiceWithCache = new HttpServiceWithCache();
+    const service: HttpServiceWithCache = new HttpServiceWithCache();
     
     service.getStuff("books").then(console.log);
     service.getStuff("books").then(console.log);    
@@ -188,8 +187,8 @@ these values will be used as default values for the method decorators.
     
     }
     
-    let service: HttpServiceWithCacheContainer = new HttpServiceWithCacheContainer();
-    let cacheService: MethodCacheService = new MethodCacheService();
+    const service: HttpServiceWithCacheContainer = new HttpServiceWithCacheContainer();
+    const cacheService: MethodCacheService = new MethodCacheService();
     
     service.getStuff("books").then(console.log);
     service.getOtherStuff("cds").then(console.log);
@@ -218,7 +217,7 @@ This will result in the following output:
     *   returning otherStuff: cds
     */
        
-The output is a bit harder to follow, but what happens is that by using a `ttl` inside the cache container, any method
+This output is a bit harder to follow, but what happens is that by using a `ttl` inside the cache container, any method
 decorator that does not have a ttl will inherit this ttl. (Same goes for `returnType` in the Storage decorators). This
 results in calling the actual `otherStuff` method 3 times, because it expires after 1 second, and the `stuff` method 
 only twice, because this cache expires after 5 seconds. 

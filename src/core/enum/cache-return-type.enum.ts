@@ -1,4 +1,4 @@
 export enum CacheReturnType {
-    Static = 1,
-    Promise
+  Static = 1,
+  Promise
 }
