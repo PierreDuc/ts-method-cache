@@ -8,8 +8,8 @@ for obtaining static data from an API or other databases.
 The current storage methods are:
 
 - Memory Cache *clears after browser refresh or restart*
-- Session Cache *clears after closing the browser (cannot be used inside node)*
-- Storage Cache *clears after clearing the storage (cannot be used inside node)*
+- Session Cache *clears after closing the browser (cannot be used inside node, acts like `MemoryCache` if used in node)*
+- Storage Cache *clears after clearing the storage (cannot be used inside node, acts like `MemoryCache` if used in node)*
 
 ## Prerequisites
 
