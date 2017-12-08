@@ -1,5 +1,5 @@
 [![npm](https://img.shields.io/npm/v/ts-method-cache.svg)](https://www.npmjs.com/package/ts-method-cache)
-[![Build Status](https://travis-ci.org/{PierreDuc/ts-method-cache.png?branch=master)](https://travis-ci.org/{PierreDuc}/ts-method-cache)
+[![Build Status](https://travis-ci.org/{PierreDuc/ts-method-cache.png?branch=master)](https://travis-ci.org/PierreDuc/ts-method-cache)
 
 # TypeScript Method Cache
 
