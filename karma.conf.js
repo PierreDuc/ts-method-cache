@@ -32,6 +32,6 @@ module.exports = function (config) {
             "**/*.ts": ["karma-typescript"]
         },
         reporters: ["progress", "karma-typescript", "kjhtml"],
-        singleRun: false
+        singleRun: true
     });
 };

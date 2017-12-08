@@ -4,6 +4,7 @@ src/
 dist/__demo/
 .npmignore
 .gitignore
+.travis.yml
 ts-mc-local-storage/
 karma.conf.js
 dist/**/*.spec.d.ts

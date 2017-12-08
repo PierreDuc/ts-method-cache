@@ -8,7 +8,7 @@ describe('Cache Object', () => {
   const key: string = 'key';
   const args: string = 'args';
   const cache: string = 'cache';
-  const ttl: number = 20;
+  const ttl: number = 50;
 
   describe('default', () => {
 
