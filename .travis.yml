@@ -20,3 +20,9 @@ before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start &
   - sleep 3
+
+before_install:
+  - pip install --user codecov
+
+after_success:
+  - codecov --file coverage/lcov.info --disable search

@@ -7,15 +7,15 @@ module.exports = function (config) {
             clearContext: false // leave Jasmine Spec Runner output visible in browser
         },
         coverageIstanbulReporter: {
-            reports: [ 'html', 'istanbul' ],
+            reports: ['html', 'lcovonly', 'text-summary'],
             fixWebpackSourcePaths: true
         },
         files: [
-            {pattern: "src/**/*.ts"}
+            {pattern: 'src/**/*.ts'}
         ],
-        frameworks: ["jasmine", "karma-typescript"],
+        frameworks: ['jasmine', 'karma-typescript'],
         karmaTypescriptConfig: {
-            tsconfig: "./tsconfig.json",
+            tsconfig: './tsconfig.json',
             compilerOptions: {
                 sourceMap: true,
                 target: 'es6'
@@ -29,9 +29,9 @@ module.exports = function (config) {
             require('karma-coverage-istanbul-reporter')
         ],
         preprocessors: {
-            "**/*.ts": ["karma-typescript"]
+            '**/*.ts': ['karma-typescript']
         },
-        reporters: ["progress", "karma-typescript", "kjhtml"],
+        reporters: ['progress', 'karma-typescript', 'kjhtml'],
         singleRun: true
     });
 };
