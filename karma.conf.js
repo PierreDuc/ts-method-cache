@@ -3,12 +3,13 @@ module.exports = function (config) {
         autoWatch: true,
         basePath: '',
         browsers: ['Chrome'],
-        client:{
-            clearContext: false // leave Jasmine Spec Runner output visible in browser
+        client: {
+            clearContext: false
         },
-        coverageIstanbulReporter: {
-            reports: ['html', 'lcovonly', 'text-summary'],
-            fixWebpackSourcePaths: true
+        coverageReporter: {
+            dir: 'coverage/',
+            type: 'lcovonly',
+            file: '../lcov.info'
         },
         files: [
             {pattern: 'src/**/*.ts'}
@@ -25,13 +26,12 @@ module.exports = function (config) {
             require('karma-typescript'),
             require('karma-jasmine'),
             require('karma-chrome-launcher'),
-            require('karma-jasmine-html-reporter'),
-            require('karma-coverage-istanbul-reporter')
+            require('karma-coverage')
         ],
         preprocessors: {
-            '**/*.ts': ['karma-typescript']
+            '**/*.ts': ['karma-typescript', 'coverage']
         },
-        reporters: ['progress', 'karma-typescript', 'kjhtml'],
+        reporters: ['progress', 'karma-typescript', 'coverage'],
         singleRun: true
     });
 };
