@@ -32,6 +32,6 @@ module.exports = function (config) {
             '**/*.ts': ['karma-typescript', 'coverage']
         },
         reporters: ['progress', 'karma-typescript', 'coverage'],
-        singleRun: false
+        singleRun: true
     });
 };
