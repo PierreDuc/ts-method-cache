@@ -14,7 +14,7 @@ cache:
     - "node_modules"
 script:
   - "npm run build"
-  - "npm run test"
+  - "npm run test -- --watch=false"
 
 before_script:
   - export DISPLAY=:99.0

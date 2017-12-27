@@ -34,7 +34,7 @@
     "session"
   ],
   "peerDependencies": {
-    "typescript": ">2.2.0"
+    "typescript": ">=2.2.0"
   },
   "devDependencies": {
     "@types/jasmine": "2.8.2",
