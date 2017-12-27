@@ -7,7 +7,7 @@ import {getCacheContainer, getMethodCacheProvider, setCacheContainer} from '../r
 
 import {createGUID} from './string.util';
 
-export function createCacheDecorator(type: CacheType, target: Object, method: Function, options: BaseCacheOptions): Function {
+export function createCacheDecorator(type: CacheType, target: Object, method: Function, options: BaseCacheOptions): () => any {
 
   const provider: BaseCacheProvider<BaseCacheObject<BaseCacheOptions>, BaseCacheOptions> = getMethodCacheProvider(type);
   const cacheObject: BaseCacheObject<BaseCacheOptions> = provider.getCacheObject(options.key!) || provider.createCacheObject(options);

@@ -7,6 +7,14 @@ class TestCache {
 
   public called: number = 0;
 
+  public getterCalled: number = 0;
+
+  @baseCacheDecorator(CacheType.Memory)
+  get testGetter(): string {
+    this.getterCalled++;
+    return 'testGetter';
+  }
+
   @baseCacheDecorator(CacheType.Memory)
   public testMethod(test: number = 0, decrement: number = 0): number {
     this.called++;
@@ -29,6 +37,13 @@ describe('Cache decorator is properly set', () => {
     testCache.testMethod(1, 1);
 
     expect(testCache.called).toEqual(3);
+  });
+
+  it("should work for a getter", () => {
+    testCache.testGetter;
+    testCache.testGetter;
+
+    expect(testCache.getterCalled).toEqual(1);
   });
 
   it("should return the right value for the right argument(s)", () => {
