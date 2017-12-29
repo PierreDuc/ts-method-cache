@@ -7,14 +7,14 @@ export function baseCacheDecorator<T extends BaseCacheOptions>(cacheType: CacheT
   options = normalizeCacheSettings<T>(options!);
 
   return (target: object, method: string | symbol, descriptor: PropertyDescriptor): PropertyDescriptor => {
-
-    if (descriptor.hasOwnProperty('get')) {
-      descriptor.get = createCacheDecorator(cacheType, target, descriptor.get!, options as T);
-    } else if (!descriptor.hasOwnProperty('set')) {
-      descriptor.value = createCacheDecorator(cacheType, target, descriptor.value!, options as T);
+    if (descriptor.hasOwnProperty('get') && descriptor.get) {
+      descriptor.get = createCacheDecorator(cacheType, target, descriptor.get, options as T);
+    } else if (!descriptor.hasOwnProperty('set') && descriptor.value) {
+      descriptor.value = createCacheDecorator(cacheType, target, descriptor.value, options as T);
+    } else {
+      throw new Error(`Can't set cache decorator on a setter`);
     }
 
     return descriptor;
-
   };
 }

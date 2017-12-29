@@ -46,6 +46,24 @@ describe('Cache decorator is properly set', () => {
     expect(testCache.getterCalled).toEqual(1);
   });
 
+  it("should not work for a setter", async () => {
+
+    await expect(() => {
+
+      class TestSetter {
+        @baseCacheDecorator(CacheType.Memory)
+        set setter(set: string) {
+          this._setter = set;
+        }
+
+        _setter: string;
+      }
+
+      new TestSetter();
+
+    }).toThrowError(`Can't set cache decorator on a setter`);
+  });
+
   it("should return the right value for the right argument(s)", () => {
     const value1: number = 5;
     const value2: number = 10;
