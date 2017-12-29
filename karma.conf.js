@@ -1,37 +1,37 @@
 module.exports = function (config) {
     config.set({
         autoWatch: true,
-        basePath: '',
-        browsers: ['Chrome'],
         client: {
             clearContext: false
         },
-        coverageReporter: {
-            dir: 'coverage/',
-            type: 'lcovonly',
-            file: '../lcov.info'
-        },
-        files: [
-            {pattern: 'src/**/*.ts'}
-        ],
-        frameworks: ['jasmine', 'karma-typescript'],
         karmaTypescriptConfig: {
             tsconfig: './tsconfig.json',
             compilerOptions: {
                 sourceMap: true,
                 target: 'es6'
+            },
+            reports: {
+                lcovonly: {
+                    directory: '.',
+                    filename: 'lcov.info',
+                    subdirectory: 'coverage'
+                },
+                html: {
+                    directory: '.',
+                    subdirectory: 'coverage'
+                },
+
             }
         },
-        plugins: [
-            require('karma-typescript'),
-            require('karma-jasmine'),
-            require('karma-chrome-launcher'),
-            require('karma-coverage')
+        frameworks: ["jasmine", "karma-typescript"],
+        files: [
+            "src/**/*.ts"
         ],
         preprocessors: {
-            '**/*.ts': ['karma-typescript', 'coverage']
+            "**/*.ts": "karma-typescript"
         },
-        reporters: ['progress', 'karma-typescript', 'coverage'],
-        singleRun: false
+        reporters: ["progress", "karma-typescript"],
+        browsers: ["Chrome"],
+        singleRun: true
     });
 };
