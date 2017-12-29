@@ -14,10 +14,6 @@
     "skipLibCheck": true,
     "stripInternal": true,
     "typeRoots": ["./node_modules/@types"],
-    "types": [
-      "node",
-      "jasmine"
-    ],
     "lib": [
       "es2017",
       "dom"
