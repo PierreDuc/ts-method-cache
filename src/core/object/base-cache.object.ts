@@ -47,6 +47,10 @@ export abstract class BaseCacheObject<T extends BaseCacheOptions> {
     if (!this.options.ttl) {
       this.options.ttl = options.ttl;
     }
+
+    if (!this.options.cacheUntilRejected) {
+      this.options.cacheUntilRejected = options.cacheUntilRejected;
+    }
   }
 
   public isExpired(args: string): boolean {

@@ -26,7 +26,15 @@ export function createCacheDecorator(type: CacheType, target: Object, method: Fu
     }
 
     if (!cacheObject.hasCache(argsString) || cacheObject.isExpired(argsString)) {
-      provider.setCache(options, argsString, method.call(this, ...args));
+      const res = method.call(this, ...args);
+
+      provider.setCache(options, argsString, res);
+
+      const isPromise = !!res && "function" === typeof res.then;
+
+      if (isPromise && options.cacheUntilRejected) {
+        res.catch((e) => cacheObject.clearArgs(argsString));
+      }
     }
 
     return cacheObject.getCache(argsString);
