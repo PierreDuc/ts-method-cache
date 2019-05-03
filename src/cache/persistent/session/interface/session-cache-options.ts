@@ -1,4 +1,3 @@
-import {PersistentCacheOptions} from '../../persistent-cache-options';
+import { PersistentCacheOptions } from '../../persistent-cache-options';
 
-export interface SessionCacheOptions extends PersistentCacheOptions {
-}
+export interface SessionCacheOptions extends PersistentCacheOptions {}

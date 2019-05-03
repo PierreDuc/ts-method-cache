@@ -1,8 +1,7 @@
-import {CacheType} from '../enum/cache-type.enum';
-import {getMethodCacheProvider} from '../resolver/method-cache-provider.resolver';
+import { CacheType } from '../enum/cache-type.enum';
+import { getMethodCacheProvider } from '../resolver/method-cache-provider.resolver';
 
 export class MethodCacheService {
-
   public clearAllCache(): void {
     this.clearMemoryCache();
     this.clearStorageCache();

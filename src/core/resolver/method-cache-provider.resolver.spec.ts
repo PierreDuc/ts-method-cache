@@ -1,12 +1,11 @@
-import {CacheContainer} from '../../';
-import {MemoryCacheProvider} from '../../cache/memory/provider/memory-cache.provider';
-import {SessionCacheProvider} from '../../cache/persistent/session/provider/session-cache.provider';
-import {StorageCacheProvider} from '../../cache/persistent/storage/provider/storage-cache.provider';
-import {CacheType} from '../enum/cache-type.enum';
-import {getMethodCacheProvider} from './method-cache-provider.resolver';
+import { CacheContainer } from '../../';
+import { MemoryCacheProvider } from '../../cache/memory/provider/memory-cache.provider';
+import { SessionCacheProvider } from '../../cache/persistent/session/provider/session-cache.provider';
+import { StorageCacheProvider } from '../../cache/persistent/storage/provider/storage-cache.provider';
+import { CacheType } from '../enum/cache-type.enum';
+import { getMethodCacheProvider } from './method-cache-provider.resolver';
 
 describe('Method cache provider resolver', () => {
-
   const memoryProvider: MemoryCacheProvider = getMethodCacheProvider<MemoryCacheProvider>(CacheType.Memory);
   const sessionProvider: SessionCacheProvider = getMethodCacheProvider<SessionCacheProvider>(CacheType.Session);
   const storageProvider: StorageCacheProvider = getMethodCacheProvider<StorageCacheProvider>(CacheType.Storage);
@@ -35,8 +34,8 @@ describe('Method cache provider resolver', () => {
       class Container1 {}
 
       @CacheContainer('testSameName')
+      // tslint:disable-next-line:max-classes-per-file
       class Container2 {}
-
     }).toThrowError();
-  })
+  });
 });

@@ -1,26 +1,32 @@
-import {CacheType} from '../enum/cache-type.enum';
-import {BaseCacheOptions} from '../interface/base-cache-options';
-import {CacheContainerOptions} from '../interface/cache-container-options';
-import {BaseCacheObject} from '../object/base-cache.object';
-import {CacheContainerObject} from '../object/cache-container.object';
+import { CacheType } from '../enum/cache-type.enum';
+import { BaseCacheOptions } from '../interface/base-cache-options';
+import { CacheContainerOptions } from '../interface/cache-container-options';
+import { BaseCacheObject } from '../object/base-cache.object';
+import { CacheContainerObject } from '../object/cache-container.object';
 
 export abstract class BaseCacheProvider<T extends BaseCacheObject<U>, U extends BaseCacheOptions> {
-
   protected abstract cacheType: CacheType;
 
-  protected abstract cacheObjectType: {new(options: U): T};
+  protected abstract cacheObjectType: { new(options: U): T };
 
   protected cache: T[] = [];
 
   protected containers: CacheContainerObject[] = [];
 
   public addToContainer(options: CacheContainerOptions, cacheObject: T): void {
-    const container: CacheContainerObject = this.getCacheContainer(options.key!) || this.initiateCacheContainer(options);
+    let container: CacheContainerObject | undefined;
+
+    if (options.key) {
+      container = this.getCacheContainer(options.key);
+    }
+
+    container = container || this.initiateCacheContainer(options);
+
     container.addCache(cacheObject);
   }
 
   public clearCache(): void {
-    this.cache.forEach(cache => cache.clear());
+    this.cache.forEach((cache) => cache.clear());
     this.clearContainers();
   }
 
@@ -29,25 +35,37 @@ export abstract class BaseCacheProvider<T extends BaseCacheObject<U>, U extends 
   }
 
   public clearContainers(): void {
-    this.containers.forEach(container => this.clearContainer(container));
+    this.containers.forEach((container) => this.clearContainer(container));
   }
 
   public clearKeyCache(key: string): void {
     const cacheObject: T | undefined = this.getCacheObject(key);
-    cacheObject && cacheObject.clear();
+
+    if (cacheObject) {
+      cacheObject.clear();
+    }
   }
 
   public clearKeyContainer(containerKey: string): void {
     const container: CacheContainerObject = this.getCacheContainer(containerKey);
-    container && this.clearContainer(container);
+
+    if (container) {
+      this.clearContainer(container);
+    }
   }
 
   public createCacheObject(options: U): T {
-    return this.getCacheObject(options.key!) || this.initiateCacheObject(options);
+    let obj: T | undefined;
+
+    if (options.key) {
+      obj = this.getCacheObject(options.key);
+    }
+
+    return obj || this.initiateCacheObject(options);
   }
 
   public getCacheObject(key: string): T | undefined {
-    return this.cache.find(cache => cache.key === key);
+    return this.cache.find((cache) => cache.key === key);
   }
 
   public setCache(options: U, args: string, cache: any): void {
@@ -55,7 +73,7 @@ export abstract class BaseCacheProvider<T extends BaseCacheObject<U>, U extends 
   }
 
   protected getCacheContainer(containerKey: string): CacheContainerObject {
-    return this.containers.filter(container => container.key === containerKey)[0];
+    return this.containers.filter((container) => container.key === containerKey)[0];
   }
 
   protected initiateCacheObject(options: U): T {

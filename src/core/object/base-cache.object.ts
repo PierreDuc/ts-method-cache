@@ -1,14 +1,13 @@
-import {CacheReturnType} from '../enum/cache-return-type.enum';
-import {CacheType} from '../enum/cache-type.enum';
-import {BaseCacheOptions} from '../interface/base-cache-options';
-import {CacheContainerOptions} from '../interface/cache-container-options';
+import { CacheReturnType } from '../enum/cache-return-type.enum';
+import { CacheType } from '../enum/cache-type.enum';
+import { BaseCacheOptions } from '../interface/base-cache-options';
+import { CacheContainerOptions } from '../interface/cache-container-options';
 
 export abstract class BaseCacheObject<T extends BaseCacheOptions> {
-
-  public readonly cacheType: CacheType;
+  public readonly cacheType!: CacheType;
 
   public get key(): string {
-    return this.options.key!;
+    return this.options.key || '';
   }
 
   public get returnType(): CacheReturnType {
@@ -19,11 +18,10 @@ export abstract class BaseCacheObject<T extends BaseCacheOptions> {
 
   protected ttl: { [args: string]: number } = {};
 
-  constructor(public readonly options: T) {
-  }
+  constructor(public readonly options: T) {}
 
   public clear(): void {
-    Object.keys(this.items).forEach(args => this.clearArgs(args));
+    Object.keys(this.items).forEach((args) => this.clearArgs(args));
   }
 
   public clearArgs(args: string): void {
@@ -63,7 +61,7 @@ export abstract class BaseCacheObject<T extends BaseCacheOptions> {
   }
 
   private getTtlFromOptions(): number | undefined {
-    const ttl: Date | string | number = this.options.ttl!;
+    const ttl: Date | string | number | undefined = this.options.ttl;
 
     if (typeof ttl === 'string' && ttl.length > 0) {
       return new Date(ttl).getTime() + new Date().getMilliseconds();
@@ -79,7 +77,7 @@ export abstract class BaseCacheObject<T extends BaseCacheOptions> {
   }
 
   private setArgsTtl(args: string): void {
-    const ttl: number = this.getTtlFromOptions()!;
+    const ttl: number | undefined = this.getTtlFromOptions();
 
     if (ttl) {
       this.ttl[args] = ttl;

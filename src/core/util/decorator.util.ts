@@ -1,25 +1,33 @@
-import {CacheType} from '../enum/cache-type.enum';
-import {BaseCacheOptions} from '../interface/base-cache-options';
-import {CacheContainerOptions} from '../interface/cache-container-options';
-import {BaseCacheObject} from '../object/base-cache.object';
-import {BaseCacheProvider} from '../provider/base-cache.provider';
-import {getCacheContainer, getMethodCacheProvider, setCacheContainer} from '../resolver/method-cache-provider.resolver';
+import { CacheType } from '../enum/cache-type.enum';
+import { BaseCacheOptions } from '../interface/base-cache-options';
+import { CacheContainerOptions } from '../interface/cache-container-options';
+import { BaseCacheObject } from '../object/base-cache.object';
+import { BaseCacheProvider } from '../provider/base-cache.provider';
+import {
+  getCacheContainer,
+  getMethodCacheProvider,
+  setCacheContainer
+} from '../resolver/method-cache-provider.resolver';
 
-import {createGUID} from './string.util';
+import { createGUID } from './string.util';
 
-export function createCacheDecorator(type: CacheType, target: Object, method: Function, options: BaseCacheOptions): () => any {
-
+export function createCacheDecorator(
+  type: CacheType,
+  target: object,
+  method: (...args) => any,
+  options: BaseCacheOptions
+): () => any {
   const provider: BaseCacheProvider<BaseCacheObject<BaseCacheOptions>, BaseCacheOptions> = getMethodCacheProvider(type);
-  const cacheObject: BaseCacheObject<BaseCacheOptions> = provider.getCacheObject(options.key!) || provider.createCacheObject(options);
+  const cacheObject: BaseCacheObject<BaseCacheOptions> | undefined =
+    (options.key && provider.getCacheObject(options.key)) || provider.createCacheObject(options);
 
   let container: CacheContainerOptions | undefined | null = null;
 
-  return function (this: Function, ...args: any[]): any {
-
+  return function(this: (...args) => any, ...args: any[]): any {
     const argsString: string = JSON.stringify(args);
 
     if (container === null) {
-      container = getCacheContainer(target.constructor);
+      container = getCacheContainer(target.constructor as any);
       if (container) {
         provider.addToContainer(container, cacheObject);
       }
@@ -30,34 +38,32 @@ export function createCacheDecorator(type: CacheType, target: Object, method: Fu
 
       provider.setCache(options, argsString, res);
 
-      const isPromise = !!res && "function" === typeof res.then;
+      const isPromise = res && typeof res.then === 'function' && typeof res.catch === 'function';
 
       if (isPromise && options.cacheUntilRejected) {
-        res.catch((e) => cacheObject.clearArgs(argsString));
+        res.catch(() => cacheObject.clearArgs(argsString));
       }
     }
 
     return cacheObject.getCache(argsString);
-  }
+  };
 }
 
 export function createCacheContainerDecorator(options: CacheContainerOptions): ClassDecorator {
-
-  return function (target: any): any {
+  return (target: any): any => {
     setCacheContainer(target, options);
 
     return target;
-  }
+  };
 }
 
-export function normalizeCacheSettings<U extends BaseCacheOptions>(options: U | string): U {
-
+export function normalizeCacheSettings<U extends BaseCacheOptions>(options?: U | string): U {
   if (typeof options === 'string') {
-    options = {key: options} as U;
+    options = { key: options } as U;
   } else if (!options) {
-    options = {key: ''} as U;
+    options = { key: '' } as U;
   }
-  
+
   if (!options.key) {
     options.key = createGUID();
   }

@@ -1,4 +1,4 @@
-import {CacheReturnType} from "../enum/cache-return-type.enum";
+import { CacheReturnType } from '../enum/cache-return-type.enum';
 
 export interface BaseCacheOptions {
   key?: string;

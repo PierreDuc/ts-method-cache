@@ -1,9 +1,7 @@
-import {createGUID} from './string.util';
+import { createGUID } from './string.util';
 
 describe('String Util', () => {
-
   describe('GUID generator, createGuide', () => {
-
     const guid: string = createGUID();
 
     it('generates a string of 36 characters', () => {
@@ -17,7 +15,7 @@ describe('String Util', () => {
       expect(guid[23]).toBe('-');
     });
 
-    it('generates a string that has the character \'4\' at position [14]', () => {
+    it('generates a string that has the character "4" at position [14]', () => {
       expect(guid[14]).toBe('4');
     });
 
@@ -26,7 +24,7 @@ describe('String Util', () => {
     });
 
     it('it generates two different strings', () => {
-      expect(guid !== createGUID()).toBeTruthy()
+      expect(guid !== createGUID()).toBeTruthy();
     });
   });
 });

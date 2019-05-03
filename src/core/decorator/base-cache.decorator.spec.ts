@@ -1,10 +1,9 @@
-import {CacheType} from "../enum/cache-type.enum";
-import {baseCacheDecorator} from "./base-cache.decorator";
+import { CacheType } from '../enum/cache-type.enum';
+import { baseCacheDecorator } from './base-cache.decorator';
 
 const increment: number = 5;
 
 class TestCache {
-
   public called: number = 0;
 
   public getterCalled: number = 0;
@@ -23,10 +22,13 @@ class TestCache {
 }
 
 describe('Cache decorator is properly set', () => {
+  let testCache: TestCache;
 
-  const testCache: TestCache = new TestCache();
+  beforeEach(() => {
+    testCache = new TestCache();
+  });
 
-  it("should only call the test method once per argument(s)", () => {
+  it('should only call the test method once per argument(s)', () => {
     testCache.testMethod();
     testCache.testMethod();
 
@@ -39,32 +41,30 @@ describe('Cache decorator is properly set', () => {
     expect(testCache.called).toEqual(3);
   });
 
-  it("should work for a getter", () => {
-    testCache.testGetter;
-    testCache.testGetter;
+  it('should work for a getter', () => {
+    const i = testCache.testGetter;
+    const ii = testCache.testGetter;
 
     expect(testCache.getterCalled).toEqual(1);
   });
 
-  it("should not work for a setter", async () => {
-
+  it('should not work for a setter', async () => {
     await expect(() => {
-
+      // tslint:disable-next-line:max-classes-per-file
       class TestSetter {
         @baseCacheDecorator(CacheType.Memory)
         set setter(set: string) {
           this._setter = set;
         }
 
-        _setter: string;
+        _setter: string = '';
       }
 
-      new TestSetter();
-
+      const t = new TestSetter();
     }).toThrowError(`Can't set cache decorator on a setter`);
   });
 
-  it("should return the right value for the right argument(s)", () => {
+  it('should return the right value for the right argument(s)', () => {
     const value1: number = 5;
     const value2: number = 10;
 

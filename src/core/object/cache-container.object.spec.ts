@@ -1,8 +1,7 @@
-import {MemoryCacheObject} from '../../cache/memory/object/memory-cache.object';
-import {CacheContainerObject} from './cache-container.object';
+import { MemoryCacheObject } from '../../cache/memory/object/memory-cache.object';
+import { CacheContainerObject } from './cache-container.object';
 
 describe('Cache Container Object', () => {
-
   const key: string = 'key';
   const args: string = 'args';
   const value: string = 'value';
@@ -11,7 +10,7 @@ describe('Cache Container Object', () => {
   let cache: MemoryCacheObject;
 
   beforeEach(() => {
-    container = new CacheContainerObject({key: key});
+    container = new CacheContainerObject({ key });
     cache = new MemoryCacheObject({});
     container.addCache(cache);
   });
@@ -32,7 +31,7 @@ describe('Cache Container Object', () => {
   it('should clear the contained cache objects', () => {
     cache.setCache(args, value);
     expect(cache.getCache(args)).toEqual(value);
-    
+
     container.clear();
     expect(cache.hasCache(args)).toBeFalsy();
   });

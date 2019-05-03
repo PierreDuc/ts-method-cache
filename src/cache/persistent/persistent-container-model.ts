@@ -1,4 +1,4 @@
-import {CacheContainerOptions} from "../../core/interface/cache-container-options";
+import { CacheContainerOptions } from '../../core/interface/cache-container-options';
 
 export interface PersistentContainerModel {
   cacheObjects: string[];

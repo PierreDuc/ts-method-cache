@@ -1,0 +1,75 @@
+{
+  "extends": "tslint:latest",
+  "rules": {
+    "arrow-return-shorthand": true,
+    "callable-types": false,
+    "class-name": true,
+    "forin": true,
+    "import-blacklist": [
+      true,
+      "rxjs",
+      "rxjs/Rx"
+    ],
+    "array-type": [true, "array"],
+    "interface-over-type-literal": true,
+    "interface-name": false,
+    "label-position": true,
+    "trailing-comma": false,
+    "member-access": false,
+    "member-ordering": [
+      true,
+      {
+        "order": [
+          "static-field",
+          "instance-field",
+          "static-method",
+          "instance-method"
+        ]
+      }
+    ],
+    "quotemark": [
+      true,
+      "single"
+    ],
+    "no-arg": true,
+    "no-bitwise": true,
+    "no-console": [
+      true,
+      "debug",
+      "info",
+      "time",
+      "timeEnd",
+      "trace"
+    ],
+    "no-construct": true,
+    "no-debugger": true,
+    "no-duplicate-super": true,
+    "no-object-literal-type-assertion": false,
+    "no-empty": false,
+    "no-empty-interface": false,
+    "no-eval": true,
+    "no-inferrable-types": [
+      false,
+      "ignore-params"
+    ],
+    "no-misused-new": true,
+    "no-non-null-assertion": true,
+    "no-shadowed-variable": true,
+    "no-string-literal": false,
+    "no-string-throw": true,
+    "no-switch-case-fall-through": true,
+    "no-unnecessary-initializer": true,
+    "no-unused-expression": true,
+    "no-use-before-declare": true,
+    "no-var-keyword": true,
+    "object-literal-sort-keys": false,
+    "prefer-const": true,
+    "radix": true,
+    "triple-equals": [
+      true,
+      "allow-null-check"
+    ],
+    "unified-signatures": true,
+    "variable-name": false
+  }
+}

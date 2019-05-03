@@ -1,6 +1,6 @@
 {
   "name": "ts-method-cache",
-  "version": "3.2.1",
+  "version": "3.3.1",
   "license": "Apache-2.0",
   "author": {
     "name": "Poul Kruijt",
@@ -9,7 +9,9 @@
   "engines": {
     "node": ">= 5.4.1"
   },
-  "contributors": [],
+  "contributors": [
+    "nitsanavni"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:PierreDuc/ts-method-cache.git"
@@ -20,6 +22,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.json",
+    "lint": "tslint --project .",
     "test": "karma start"
   },
   "types": "dist/index.d.ts",
@@ -37,13 +40,15 @@
     "typescript": ">=2.2.0"
   },
   "devDependencies": {
-    "@types/jasmine": "2.8.3",
-    "@types/node": "8.5.2",
-    "jasmine-core": "2.8.0",
-    "karma": "2.0.0",
-    "karma-chrome-launcher": "2.2.0",
-    "karma-jasmine": "1.1.1",
-    "karma-typescript": "3.0.9",
-    "typescript": "2.6.2"
+    "@types/jasmine": "^3.3.12",
+    "@types/node": "^11.13.8",
+    "jasmine-core": "^3.4.0",
+    "karma": "^4.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^2.0.1",
+    "karma-typescript": "^4.0.0",
+    "prettier": "^1.17.0",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
   }
 }

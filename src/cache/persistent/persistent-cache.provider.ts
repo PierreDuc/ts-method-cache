@@ -1,17 +1,19 @@
-import {CacheContainerOptions} from '../../core/interface/cache-container-options';
-import {CacheContainerObject} from '../../core/object/cache-container.object';
-import {BaseCacheProvider} from '../../core/provider/base-cache.provider';
-import {PersistentStorage} from './persistent-storage';
-import {PersistentCacheModel} from './persistent-cache-model';
-import {PersistentCacheOptions} from './persistent-cache-options';
-import {PersistentCacheObject} from './persistent-cache.object';
-import {PersistentContainerModel} from './persistent-container-model';
+import { CacheContainerOptions } from '../../core/interface/cache-container-options';
+import { CacheContainerObject } from '../../core/object/cache-container.object';
+import { BaseCacheProvider } from '../../core/provider/base-cache.provider';
+import { PersistentCacheModel } from './persistent-cache-model';
+import { PersistentCacheOptions } from './persistent-cache-options';
+import { PersistentCacheObject } from './persistent-cache.object';
+import { PersistentContainerModel } from './persistent-container-model';
+import { PersistentStorage } from './persistent-storage';
 
-export abstract class PersistentCacheProvider<T extends PersistentCacheObject<U>, U extends PersistentCacheOptions> extends BaseCacheProvider<T, U> {
+export abstract class PersistentCacheProvider<
+  T extends PersistentCacheObject<U>,
+  U extends PersistentCacheOptions
+> extends BaseCacheProvider<T, U> {
+  protected storage!: PersistentStorage<U>;
 
-  protected storage: PersistentStorage<U>;
-
-  constructor() {
+  protected constructor() {
     super();
   }
 
@@ -58,22 +60,33 @@ export abstract class PersistentCacheProvider<T extends PersistentCacheObject<U>
     const cacheObjects: PersistentCacheModel<U>[] = this.storage.getStorageItems();
     const containerObjects: PersistentContainerModel[] = this.storage.getContainerItems();
 
-    cacheObjects.forEach(cacheObject => this.initiateCacheObject(cacheObject.options));
+    cacheObjects.forEach((cacheObject) => this.initiateCacheObject(cacheObject.options));
 
     containerObjects.forEach((containerObject: PersistentContainerModel) => {
       const container: CacheContainerObject = this.initiateCacheContainer(containerObject.options);
-      containerObject.cacheObjects.forEach(cacheKey => container.addCache(this.getCacheObject(cacheKey)!));
+      containerObject.cacheObjects.forEach((cacheKey) => {
+        const cache = this.getCacheObject(cacheKey);
+
+        if (cache) {
+          container.addCache(cache);
+        }
+      });
     });
 
     cacheObjects.forEach((cacheObject: PersistentCacheModel<U>) => {
-      const cache: T = this.getCacheObject(cacheObject.options.key!)!;
-      cache.restoreCacheObject(cacheObject.items, cacheObject.ttl);
+      if (cacheObject.options.key) {
+        const cache: T | undefined = this.getCacheObject(cacheObject.options.key);
+
+        if (cache) {
+          cache.restoreCacheObject(cacheObject.items, cacheObject.ttl);
+        }
+      }
     });
   }
 
   private async saveCache(): Promise<void> {
-    this.storage.setStorageItems(await Promise.all(
-      this.cache.map(async cache => await cache.storeCacheObject()))
+    this.storage.setStorageItems(
+      await Promise.all(this.cache.map(async (cache) => cache.storeCacheObject()))
     );
   }
 
@@ -81,8 +94,8 @@ export abstract class PersistentCacheProvider<T extends PersistentCacheObject<U>
     const storageContainerCache: PersistentContainerModel[] = this.containers.map((container: CacheContainerObject) => {
       return {
         options: container.options,
-        cacheObjects: container.cacheObjects.map(cache => cache.key)
-      }
+        cacheObjects: container.cacheObjects.map((cache) => cache.key)
+      };
     });
 
     this.storage.setContainerItems(storageContainerCache);

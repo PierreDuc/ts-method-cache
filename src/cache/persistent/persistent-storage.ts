@@ -1,11 +1,10 @@
-import {LocalStorageCacheKey, LocalStorageContainerKey} from '../../core/constant/storage-keys.constant';
-import {CacheType} from '../../core/enum/cache-type.enum';
-import {PersistentCacheModel} from './persistent-cache-model';
-import {PersistentCacheOptions} from './persistent-cache-options';
-import {PersistentContainerModel} from './persistent-container-model';
+import { LocalStorageCacheKey, LocalStorageContainerKey } from '../../core/constant/storage-keys.constant';
+import { CacheType } from '../../core/enum/cache-type.enum';
+import { PersistentCacheModel } from './persistent-cache-model';
+import { PersistentCacheOptions } from './persistent-cache-options';
+import { PersistentContainerModel } from './persistent-container-model';
 
 export class PersistentStorage<T extends PersistentCacheOptions> {
-
   private readonly cache: object = {};
 
   private storage: Storage | undefined;
@@ -34,9 +33,9 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
     this.setItem(LocalStorageContainerKey, items);
   }
 
-  private setItem(key: string, data: PersistentContainerModel[]|PersistentCacheModel<T>[]): void {
+  private setItem(key: string, data: PersistentContainerModel[] | PersistentCacheModel<T>[]): void {
     if (this.storage) {
-      this.storage.setItem(key, JSON.stringify(data))
+      this.storage.setItem(key, JSON.stringify(data));
     } else {
       this.cache[key] = data;
     }
@@ -44,7 +43,7 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
 
   private getItem(key: string): any[] {
     if (this.storage) {
-      return JSON.parse(this.storage.getItem(key)!)
+      return JSON.parse(this.storage.getItem(key) || '[]');
     } else {
       return this.cache[key];
     }
