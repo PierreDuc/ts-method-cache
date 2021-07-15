@@ -7,7 +7,7 @@ import { PersistentContainerModel } from './persistent-container-model';
 export class PersistentStorage<T extends PersistentCacheOptions> {
   private readonly cache: object = {};
 
-  private storage: Storage | undefined;
+  private storage: Storage | chrome.storage.LocalStorageArea | undefined;
 
   constructor(private readonly cacheType: CacheType) {
     if (cacheType === CacheType.Session && typeof sessionStorage !== 'undefined') {
