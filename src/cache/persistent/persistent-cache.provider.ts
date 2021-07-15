@@ -58,7 +58,6 @@ export abstract class PersistentCacheProvider<
     this.containers.length = 0;
 
     const cacheObjects: PersistentCacheModel<U>[] = await this.storage.getStorageItems();
-    console.log(cacheObjects);
     const containerObjects: PersistentContainerModel[] = await this.storage.getContainerItems();
 
     cacheObjects.forEach((cacheObject) => this.initiateCacheObject(cacheObject.options));
