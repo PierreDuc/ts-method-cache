@@ -66,7 +66,7 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
       const data = (await this.getData(key) as any);
       return data || [];
     } else if (this.storage) {
-      return this.storage.get(key || '[]');
+      return this.storage.get(key || []);
     }
     else {
       return this.cache[key];
