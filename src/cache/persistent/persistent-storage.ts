@@ -21,7 +21,7 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
     }
   }
 
-  public getStorageItems(): PersistentCacheModel<T>[] {
+  public getStorageItems(): Promise<PersistentCacheModel<T>[]> {
     return this.getItem(LocalStorageCacheKey) || [];
   }
 
@@ -29,7 +29,7 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
     this.setItem(LocalStorageCacheKey, items);
   }
 
-  public getContainerItems(): PersistentContainerModel[] {
+  public async getContainerItems(): Promise<PersistentContainerModel[]> {
     return this.getItem(LocalStorageContainerKey) || [];
   }
 
@@ -45,26 +45,25 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
     }
   }
   
-  
-private getData(sKey: any) {
-  return new Promise(function (resolve, reject) {
-    chrome.storage.local.get(sKey, function (items) {
-      if (chrome.runtime.lastError) {
-        console.error(
-          'utils: Error while getData ',
-          chrome.runtime.lastError.message
-        );
-        reject(chrome.runtime.lastError.message);
-      } else {
-        resolve(items[sKey]);
-      }
+  private getData(sKey: any) {
+    return new Promise(function (resolve, reject) {
+      chrome.storage.local.get(sKey, function (items) {
+        if (chrome.runtime.lastError) {
+          console.error(
+            'utils: Error while getData ',
+            chrome.runtime.lastError.message
+          );
+          reject(chrome.runtime.lastError.message);
+        } else {
+          resolve(items[sKey]);
+        }
+      });
     });
-  });
-}
-  
-  private async getItem(key: string): any[] {
-    if (this.storage instanceof chrome.storage.local) {
-      const data = await getData(key);
+  }
+    
+  private async getItem(key: string): Promise<any[]> {
+    if ('QUOTA_BYTES' in this.storage!) {
+      const data = (await this.getData(key) as any);
       return data;
     } else if (this.storage) {
       return this.storage.get(key || '[]');

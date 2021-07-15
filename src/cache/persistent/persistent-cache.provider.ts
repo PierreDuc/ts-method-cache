@@ -53,12 +53,12 @@ export abstract class PersistentCacheProvider<
     this.saveCache();
   }
 
-  protected restoreCacheObjects(): void {
+  protected async restoreCacheObjects(): Promise<void> {
     this.cache.length = 0;
     this.containers.length = 0;
 
-    const cacheObjects: PersistentCacheModel<U>[] = this.storage.getStorageItems();
-    const containerObjects: PersistentContainerModel[] = this.storage.getContainerItems();
+    const cacheObjects: PersistentCacheModel<U>[] = await this.storage.getStorageItems();
+    const containerObjects: PersistentContainerModel[] = await this.storage.getContainerItems();
 
     cacheObjects.forEach((cacheObject) => this.initiateCacheObject(cacheObject.options));
 
