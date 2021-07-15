@@ -12,7 +12,11 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
   constructor(private readonly cacheType: CacheType) {
     if (cacheType === CacheType.Session && typeof sessionStorage !== 'undefined') {
       this.storage = sessionStorage;
-    } else if (cacheType === CacheType.Storage && typeof localStorage !== 'undefined') {
+      // Add chrome.storage.local support
+    } else if (cacheType === CacheType.Storage && typeof chrome.storage.local !== 'undefined') {
+      this.storage = chrome.storage.local;
+    }
+    else if (cacheType === CacheType.Storage && typeof localStorage !== 'undefined') {
       this.storage = localStorage;
     }
   }
