@@ -39,15 +39,33 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
 
   private setItem(key: string, data: PersistentContainerModel[] | PersistentCacheModel<T>[]): void {
     if (this.storage) {
-      this.storage.set(key, JSON.stringify(data));
+      this.storage.set({key:data});
     } else {
       this.cache[key] = data;
     }
   }
-
-  private getItem(key: string): any[] {
+  
+  
+private getData(sKey: any) {
+  return new Promise(function (resolve, reject) {
+    chrome.storage.local.get(sKey, function (items) {
+      if (chrome.runtime.lastError) {
+        console.error(
+          'utils: Error while getData ',
+          chrome.runtime.lastError.message
+        );
+        reject(chrome.runtime.lastError.message);
+      } else {
+        resolve(items[sKey]);
+      }
+    });
+  });
+}
+  
+  private async getItem(key: string): any[] {
     if (this.storage) {
-      return this.storage.get(key || '[]');
+      const data = await getData(key);
+      return data;
     } else {
       return this.cache[key];
     }
