@@ -21,8 +21,8 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
     }
   }
 
-  public getStorageItems(): Promise<PersistentCacheModel<T>[]> {
-    return this.getItem(LocalStorageCacheKey) || [];
+  public async getStorageItems(): Promise<PersistentCacheModel<T>[]> {
+    return await this.getItem(LocalStorageCacheKey) || [];
   }
 
   public setStorageItems(items: PersistentCacheModel<T>[]): void {
@@ -30,7 +30,7 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
   }
 
   public async getContainerItems(): Promise<PersistentContainerModel[]> {
-    return this.getItem(LocalStorageContainerKey) || [];
+    return await this.getItem(LocalStorageContainerKey) || [];
   }
 
   public setContainerItems(items: PersistentContainerModel[]): void {
