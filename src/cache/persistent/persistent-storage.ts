@@ -22,19 +22,19 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
   }
 
   public getStorageItems(): PersistentCacheModel<T>[] {
-    return this.get(LocalStorageCacheKey) || [];
+    return this.getItem(LocalStorageCacheKey) || [];
   }
 
   public setStorageItems(items: PersistentCacheModel<T>[]): void {
-    this.set(LocalStorageCacheKey, items);
+    this.setItem(LocalStorageCacheKey, items);
   }
 
   public getContainerItems(): PersistentContainerModel[] {
-    return this.get(LocalStorageContainerKey) || [];
+    return this.getItem(LocalStorageContainerKey) || [];
   }
 
   public setContainerItems(items: PersistentContainerModel[]): void {
-    this.set(LocalStorageContainerKey, items);
+    this.setItem(LocalStorageContainerKey, items);
   }
 
   private setItem(key: string, data: PersistentContainerModel[] | PersistentCacheModel<T>[]): void {
