@@ -39,7 +39,7 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
 
   private setItem(key: string, data: PersistentContainerModel[] | PersistentCacheModel<T>[]): void {
     if (this.storage) {
-      this.storage.set({key:data});
+      this.storage.set({[key]:data});
     } else {
       this.cache[key] = data;
     }
