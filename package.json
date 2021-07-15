@@ -41,6 +41,7 @@
     "typescript": ">=2.2.0"
   },
   "devDependencies": {
+    "@types/chrome": "^0.0.144",
     "@types/jasmine": "^3.3.12",
     "@types/node": "^11.13.8",
     "jasmine-core": "^3.4.0",
