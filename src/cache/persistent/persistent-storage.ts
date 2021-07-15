@@ -62,7 +62,7 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
   }
     
   private async getItem(key: string): Promise<any[]> {
-    if ('QUOTA_BYTES' in this.storage!) {
+    if (this.storage && 'QUOTA_BYTES' in this.storage) {
       const data = (await this.getData(key) as any);
       return data;
     } else if (this.storage) {
