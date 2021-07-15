@@ -34,12 +34,12 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
   }
 
   public setContainerItems(items: PersistentContainerModel[]): void {
-    this.setItem(LocalStorageContainerKey, items);
+    this.set(LocalStorageContainerKey, items);
   }
 
   private setItem(key: string, data: PersistentContainerModel[] | PersistentCacheModel<T>[]): void {
     if (this.storage) {
-      this.storage.setItem(key, JSON.stringify(data));
+      this.storage.set(key, JSON.stringify(data));
     } else {
       this.cache[key] = data;
     }
@@ -47,7 +47,7 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
 
   private getItem(key: string): any[] {
     if (this.storage) {
-      return JSON.parse(this.storage.getItem(key) || '[]');
+      return this.storage.get(key || '[]');
     } else {
       return this.cache[key];
     }
