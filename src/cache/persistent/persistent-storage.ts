@@ -63,10 +63,13 @@ private getData(sKey: any) {
 }
   
   private async getItem(key: string): any[] {
-    if (this.storage) {
+    if (this.storage instanceof chrome.storage.local) {
       const data = await getData(key);
       return data;
-    } else {
+    } else if (this.storage) {
+      return this.storage.get(key || '[]');
+    }
+    else {
       return this.cache[key];
     }
   }
