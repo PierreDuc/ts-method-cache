@@ -15,14 +15,13 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
       // Add chrome.storage.local support
     } else if (cacheType === CacheType.Storage && typeof chrome.storage.local !== 'undefined') {
       this.storage = chrome.storage.local;
-    }
-    else if (cacheType === CacheType.Storage && typeof localStorage !== 'undefined') {
+    } else if (cacheType === CacheType.Storage && typeof localStorage !== 'undefined') {
       this.storage = localStorage;
     }
   }
 
   public async getStorageItems(): Promise<PersistentCacheModel<T>[]> {
-    return await this.getItem(LocalStorageCacheKey) || [];
+    return (await this.getItem(LocalStorageCacheKey)) || [];
   }
 
   public setStorageItems(items: PersistentCacheModel<T>[]): void {
@@ -30,7 +29,7 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
   }
 
   public async getContainerItems(): Promise<PersistentContainerModel[]> {
-    return await this.getItem(LocalStorageContainerKey) || [];
+    return (await this.getItem(LocalStorageContainerKey)) || [];
   }
 
   public setContainerItems(items: PersistentContainerModel[]): void {
@@ -39,20 +38,17 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
 
   private setItem(key: string, data: PersistentContainerModel[] | PersistentCacheModel<T>[]): void {
     if (this.storage) {
-      this.storage.set({[key]:data});
+      this.storage.set({ [key]: data });
     } else {
       this.cache[key] = data;
     }
   }
-  
+
   private getData(sKey: any) {
-    return new Promise(function (resolve, reject) {
-      chrome.storage.local.get(sKey, function (items) {
+    return new Promise(function(resolve, reject) {
+      chrome.storage.local.get(sKey, function(items) {
         if (chrome.runtime.lastError) {
-          console.error(
-            'utils: Error while getData ',
-            chrome.runtime.lastError.message
-          );
+          console.error('utils: Error while getData ', chrome.runtime.lastError.message);
           reject(chrome.runtime.lastError.message);
         } else {
           resolve(items[sKey]);
@@ -60,14 +56,11 @@ export class PersistentStorage<T extends PersistentCacheOptions> {
       });
     });
   }
-    
+
   private async getItem(key: string): Promise<any[]> {
     if (this.storage && 'QUOTA_BYTES' in this.storage) {
-      return (await this.getData(key) as any) || [];
-    } else if (this.storage) {
-      return this.storage.get(key || []);
-    }
-    else {
+      return ((await this.getData(key)) as any) || [];
+    } else {
       return this.cache[key];
     }
   }
