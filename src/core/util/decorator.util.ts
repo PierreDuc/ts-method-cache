@@ -24,8 +24,9 @@ export function createCacheDecorator(
   let container: CacheContainerOptions | undefined | null = null;
 
   return function(this: (...args) => any, ...args: any[]): any {
-    const argsString: string = JSON.stringify(args);
-
+    const argsString: string = options.calculateCacheKeyFunction
+      ? options.calculateCacheKeyFunction(this, args)
+      : JSON.stringify(args);
     if (container === null) {
       container = getCacheContainer(target.constructor as any);
       if (container) {

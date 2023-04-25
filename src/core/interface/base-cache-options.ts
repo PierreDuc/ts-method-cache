@@ -1,8 +1,9 @@
-import { CacheReturnType } from '../enum/cache-return-type.enum';
+import {CacheReturnType} from '../enum/cache-return-type.enum';
 
 export interface BaseCacheOptions {
-  key?: string;
-  returnType?: CacheReturnType;
-  ttl?: string | number | Date;
-  cacheUntilRejected?: boolean;
+    key?: string;
+    returnType?: CacheReturnType;
+    ttl?: string | number | Date;
+    cacheUntilRejected?: boolean;
+    calculateCacheKeyFunction?: (target: any, args: any) => string;
 }
