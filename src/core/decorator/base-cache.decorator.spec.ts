@@ -8,6 +8,17 @@ class TestCache {
 
   public getterCalled: number = 0;
 
+  public b: number = 0;
+
+  @baseCacheDecorator(CacheType.Memory, {
+    calculateCacheKeyFunction: (target: TestCache, args) => {
+      return JSON.stringify({ uniqCacheKey: target.b, ...args });
+    }
+  })
+  public sum(a): number {
+    return a + this.b;
+  }
+
   @baseCacheDecorator(CacheType.Memory)
   get testGetter(): string {
     this.getterCalled++;
@@ -85,5 +96,13 @@ describe('Cache decorator is properly set', () => {
 
     expect(noCache3).toEqual(cache3);
     expect(noCache3).toEqual(value1 + increment - value2);
+  });
+  it('if a key calculation method is passed, it is used for calculations', () => {
+    const testCache2 = new TestCache();
+    testCache.b = 1;
+    testCache2.b = 10;
+
+    expect(testCache.sum(1)).toEqual(2);
+    expect(testCache2.sum(1)).toEqual(11);
   });
 });
