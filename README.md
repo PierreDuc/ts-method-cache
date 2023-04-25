@@ -99,7 +99,12 @@ by setting this to `CacheReturnType.Promise`.
     cacheUntilRejected?: boolean
 
 When caching a method returning a Promise, this option will clear the relevant cache when the Promise is
-rejected. If the Promise resolves normally, the cache persists.
+rejected. If the Promise resolves normally, the cache persists. 
+
+    calculateCacheKeyFunction?: (target: any, args: any) => string;
+
+If necessary, it is possible to set your own function for creating a key for caching
+
 
 ### `MethodCacheService`
 
